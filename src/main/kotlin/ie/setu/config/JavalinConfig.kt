@@ -53,6 +53,10 @@ class JavalinConfig {
                         get(HealthTrackerController::getBmisByUserId)
                         delete(HealthTrackerController::deleteBmiByUserId)
                     }
+                    path("calories") {
+                        get(HealthTrackerController::getCaloriesByUserId)
+                        delete(HealthTrackerController::deleteCalorieByUserId)
+                    }
                 }
                 path("/email/{email}") {
                     get(HealthTrackerController::getUserByEmail)
@@ -83,6 +87,15 @@ class JavalinConfig {
                     get(HealthTrackerController::getBmisByBmiId)
                     delete(HealthTrackerController::deleteBmiByBmiId)
                     patch(HealthTrackerController::updateBmi)
+                }
+            }
+            path("/api/calories") {
+                get(HealthTrackerController::getAllCalories)
+                post(HealthTrackerController::addCalorie)
+                path("{calorie-id}") {
+                    get(HealthTrackerController::getCaloriesByCalorieId)
+                    delete(HealthTrackerController::deleteCalorieByCalorieId)
+                    patch(HealthTrackerController::updateCalorie)
                 }
             }
         }

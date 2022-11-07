@@ -1,9 +1,6 @@
 package ie.setu.utils
 
-import ie.setu.domain.Activity
-import ie.setu.domain.Bmi
-import ie.setu.domain.SleepingTime
-import ie.setu.domain.User
+import ie.setu.domain.*
 import ie.setu.domain.db.*
 import org.jetbrains.exposed.sql.ResultRow
 
@@ -38,5 +35,13 @@ fun mapToBMI(it: ResultRow) = Bmi(
     height = it[Bmis.height],
     weight = it[Bmis.weight],
     bmiData = it[Bmis.bmiData],
+    userId = it[Bmis.userId],
+)
+
+fun mapToCalorie(it: ResultRow) = Calorie(
+    id = it[Bmis.id],
+    dateTime =it[Calories.dateTime],
+    calorieGet = it[Calories.calorieGet],
+    state = it[Calories.state],
     userId = it[Bmis.userId],
 )

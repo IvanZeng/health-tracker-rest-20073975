@@ -1,13 +1,12 @@
-package ie.setu.domain.db
 
+import ie.setu.domain.db.Users
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 
-object Bmis : Table("bmis") {
+object Calories : Table("calories") {
     val id = integer("id").autoIncrement().primaryKey()
-    val gender = varchar("gender", 60)
-    val height = integer("height")
-    val weight = double("weight")
-    val bmiData = varchar("BMI", 60)
+    val dateTime = datetime("date")
+    val calorieGet = integer("calorie")
+    val state = varchar("state", 60)
     val userId = integer("user_id").references(Users.id, onDelete = ReferenceOption.CASCADE)
 }

@@ -4,15 +4,9 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import ie.setu.domain.Activity
-import ie.setu.domain.Bmi
-import ie.setu.domain.SleepingTime
-import ie.setu.domain.User
-import ie.setu.domain.repository.ActivityDAO
-import ie.setu.domain.repository.BmiDAO
+import ie.setu.domain.*
+import ie.setu.domain.repository.*
 
-import ie.setu.domain.repository.SleepingTimeDAO
-import ie.setu.domain.repository.UserDAO
 import io.javalin.http.Context
 import io.javalin.plugin.openapi.annotations.*
 
@@ -22,6 +16,7 @@ object HealthTrackerController {
     private val activityDAO = ActivityDAO()
     val sleepingTimeDAO = SleepingTimeDAO()
     val bmiDAO = BmiDAO()
+    val calorieDAO = CalorieDAO()
 
     @OpenApi(
         summary = "Get all users",
@@ -375,10 +370,102 @@ fun updateSleepingTime(ctx: Context){
             bmiDTO=bmi)
     }
 
+    //--------------------------------------------------------------
+// CalorieDAO specifics
+//-------------------------------------------------------------
+//
+    @OpenApi(
+        summary = "Get all calories",
+        operationId = "getAllCalories",
+        tags = ["Calorie"],
+        path = "/api/calories",
+        method = HttpMethod.GET,
+        responses = [OpenApiResponse("200", [OpenApiContent(Array<Calorie>::class)])]
+    )
+    fun getAllCalories(ctx: Context) {
+        //mapper handles the deserialization of Joda date into a String.
+        val mapper = jacksonObjectMapper()
+            .registerModule(JodaModule())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+        ctx.json(mapper.writeValueAsString(calorieDAO.getAll()))
+    }
+
+    @OpenApi(
+        summary = "Get calorie by ID",
+        operationId = "getCalorieById",
+        tags = ["Calorie"],
+        path = "/api/calories/{calorie-id}",
+        method = HttpMethod.GET,
+        pathParams = [OpenApiParam("calorie-id", Int::class, "The calorie ID")],
+        responses  = [OpenApiResponse("200", [OpenApiContent(Calorie::class)])]
+    )
+    fun getCaloriesByUserId(ctx: Context) {
+        if (HealthTrackerController.userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
+            val Calories = HealthTrackerController.calorieDAO.findByUserId(ctx.pathParam("user-id").toInt())
+            if (Calories.isNotEmpty()) {
+                //mapper handles the deserialization of Joda date into a String.
+                val mapper = jacksonObjectMapper()
+                    .registerModule(JodaModule())
+                    .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                ctx.json(mapper.writeValueAsString(Calories))
+            }
+        }
+    }
+    @OpenApi(
+        summary = "Add Calorie",
+        operationId = "addCalorie",
+        tags = ["Calorie"],
+        path = "/api/calorie",
+        method = HttpMethod.POST,
+        pathParams = [OpenApiParam("calorie-id", Int::class, "The calorie ID")],
+        responses = [OpenApiResponse("200")]
+    )
+    fun addCalorie(ctx: Context) {
+        //mapper handles the serialisation of Joda date into a String.
+        val mapper = jacksonObjectMapper()
+            .registerModule(JodaModule())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+        val calorie = mapper.readValue<Calorie>(ctx.body())
+        HealthTrackerController.calorieDAO.save(calorie)
+        ctx.json(calorie)
+    }
 
 
+    @OpenApi(
+        summary = "Get calorie by ID",
+        operationId = "getcalorieById",
+        tags = ["Calorie"],
+        path = "/api/calories/{calorie-id}",
+        method = HttpMethod.GET,
+        pathParams = [OpenApiParam("calorie-id", Int::class, "The calorie ID")],
+        responses = [OpenApiResponse("200", [OpenApiContent(Calorie::class)])]
+    )
+    fun getCaloriesByCalorieId(ctx: Context) {
+        val calorie = HealthTrackerController.calorieDAO.findByCalorieId((ctx.pathParam("calorie-id").toInt()))
+        if (calorie != null){
+            val mapper = jacksonObjectMapper()
+                .registerModule(JodaModule())
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+            ctx.json(mapper.writeValueAsString(calorie))
+        }
+    }
 
+    fun deleteCalorieByCalorieId(ctx: Context){
+        HealthTrackerController.calorieDAO.deleteByCalorieId(ctx.pathParam("calorie-id").toInt())
+    }
 
+    fun deleteCalorieByUserId(ctx: Context){
+        HealthTrackerController.calorieDAO.deleteByUserId(ctx.pathParam("user-id").toInt())
+    }
 
+    fun updateCalorie(ctx: Context){
+        val mapper = jacksonObjectMapper()
+            .registerModule(JodaModule())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+        val calorie = mapper.readValue<Calorie>(ctx.body())
+        HealthTrackerController.calorieDAO.updateByCalorieId(
+            calorieId = ctx.pathParam("sleepingTime-id").toInt(),
+            calorieDTO=calorie)
+    }
 }
 
