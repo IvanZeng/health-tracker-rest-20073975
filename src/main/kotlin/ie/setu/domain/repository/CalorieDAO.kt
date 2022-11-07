@@ -3,7 +3,7 @@ package ie.setu.domain.repository
 import ie.setu.domain.Bmi
 import ie.setu.domain.Calorie
 import ie.setu.domain.db.Bmis
-import ie.setu.utils.mapToBMI
+import ie.setu.utils.mapToBmi
 import ie.setu.utils.mapToCalorie
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

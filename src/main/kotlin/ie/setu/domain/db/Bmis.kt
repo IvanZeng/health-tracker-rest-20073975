@@ -8,6 +8,6 @@ object Bmis : Table("bmis") {
     val gender = varchar("gender", 60)
     val height = integer("height")
     val weight = double("weight")
-    val bmiData = varchar("BMI", 60)
+    val bmiData = varchar("bmiData", 60)
     val userId = integer("user_id").references(Users.id, onDelete = ReferenceOption.CASCADE)
 }

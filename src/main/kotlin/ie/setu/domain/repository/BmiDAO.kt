@@ -2,7 +2,7 @@ package ie.setu.domain.repository
 
 import ie.setu.domain.Bmi
 import ie.setu.domain.db.Bmis
-import ie.setu.utils.mapToBMI
+import ie.setu.utils.mapToBmi
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -12,7 +12,7 @@ class BmiDAO {
         val BmisList: ArrayList<Bmi> = arrayListOf()
         transaction {
             Bmis.selectAll().map {
-                BmisList.add(mapToBMI(it))
+                BmisList.add(mapToBmi(it))
             }
         }
         return BmisList
@@ -22,7 +22,7 @@ class BmiDAO {
         return transaction {
             Bmis
                 .select() { Bmis.id eq id }
-                .map { mapToBMI(it) }
+                .map { mapToBmi(it) }
                 .firstOrNull()
         }
     }
@@ -31,7 +31,7 @@ class BmiDAO {
         return transaction {
             Bmis
                 .select { Bmis.userId eq userId }
-                .map { mapToBMI(it)}
+                .map { mapToBmi(it)}
         }
     }
 
@@ -61,9 +61,9 @@ class BmiDAO {
         }
     }
 
-    fun deleteByBmiId(BMIId: Int): Int {
+    fun deleteByBmiId(BmiId: Int): Int {
         return transaction {
-            Bmis.deleteWhere { Bmis.id eq BMIId }
+            Bmis.deleteWhere { Bmis.id eq BmiId }
         }
     }
 

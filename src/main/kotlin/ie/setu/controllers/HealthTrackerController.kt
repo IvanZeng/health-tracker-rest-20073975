@@ -14,9 +14,9 @@ object HealthTrackerController {
 
     val userDao = UserDAO()
     private val activityDAO = ActivityDAO()
-    val sleepingTimeDAO = SleepingTimeDAO()
-    val bmiDAO = BmiDAO()
-    val calorieDAO = CalorieDAO()
+    private val sleepingTimeDAO = SleepingTimeDAO()
+    private val bmiDAO = BmiDAO()
+    private val calorieDAO = CalorieDAO()
 
     @OpenApi(
         summary = "Get all users",
@@ -183,7 +183,7 @@ object HealthTrackerController {
         tags = ["SleepingTime"],
         path = "/api/sleepingTimes",
         method = HttpMethod.GET,
-        responses = [OpenApiResponse("200", [OpenApiContent(Array<User>::class)])]
+        responses = [OpenApiResponse("200", [OpenApiContent(Array<SleepingTime>::class)])]
     )
     fun getAllSleepingTimes(ctx: Context) {
         //mapper handles the deserialization of Joda date into a String.
@@ -218,7 +218,7 @@ fun getSleepingTimesByUserId(ctx: Context) {
         summary = "Add SleepingTime",
         operationId = "addSleepingTime",
         tags = ["SleepingTime"],
-        path = "/api/sleepingTime",
+        path = "/api/sleepingTimes",
         method = HttpMethod.POST,
         pathParams = [OpenApiParam("sleepingTime-id", Int::class, "The sleeping time ID")],
         responses = [OpenApiResponse("200")]
@@ -273,7 +273,7 @@ fun updateSleepingTime(ctx: Context){
 
 
     //--------------------------------------------------------------
-// BMIDAO specifics
+// BmiDAO specifics
 //-------------------------------------------------------------
 //
     @OpenApi(
@@ -282,7 +282,7 @@ fun updateSleepingTime(ctx: Context){
         tags = ["Bmi"],
         path = "/api/bmis",
         method = HttpMethod.GET,
-        responses = [OpenApiResponse("200", [OpenApiContent(Array<User>::class)])]
+        responses = [OpenApiResponse("200", [OpenApiContent(Array<Bmi>::class)])]
     )
     fun getAllBmis(ctx: Context) {
         //mapper handles the deserialization of Joda date into a String.
@@ -317,7 +317,7 @@ fun updateSleepingTime(ctx: Context){
         summary = "Add Bmi",
         operationId = "addBmi",
         tags = ["Bmi"],
-        path = "/api/bmi",
+        path = "/api/bmis",
         method = HttpMethod.POST,
         pathParams = [OpenApiParam("bmi-id", Int::class, "The bmi ID")],
         responses = [OpenApiResponse("200")]
@@ -415,7 +415,7 @@ fun updateSleepingTime(ctx: Context){
         summary = "Add Calorie",
         operationId = "addCalorie",
         tags = ["Calorie"],
-        path = "/api/calorie",
+        path = "/api/calories",
         method = HttpMethod.POST,
         pathParams = [OpenApiParam("calorie-id", Int::class, "The calorie ID")],
         responses = [OpenApiResponse("200")]

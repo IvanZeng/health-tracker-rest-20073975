@@ -1,6 +1,6 @@
 package ie.setu.repository
 
-import ie.setu.controllers.HealthTrackerController.bmiDAO
+//import ie.setu.controllers.HealthTrackerController.bmiDAO
 import ie.setu.domain.Bmi
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -181,7 +181,7 @@ class BmiDAOTest {
 
                 //Arrange - create and populate tables with three users and three bmis
                 val userDAO = populateUserTable()
-                val sbmiDAO = populateBmiTable()
+                val bmiDAO = populateBmiTable()
 
                 //Act & Assert
                 assertEquals(3, bmiDAO.getAll().size)

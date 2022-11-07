@@ -29,7 +29,7 @@ fun mapToSleepingTime(it: ResultRow) = SleepingTime(
     userId = it[SleepingTimes.userId],
 )
 
-fun mapToBMI(it: ResultRow) = Bmi(
+fun mapToBmi(it: ResultRow) = Bmi(
     id = it[Bmis.id],
     gender =it[Bmis.gender],
     height = it[Bmis.height],
