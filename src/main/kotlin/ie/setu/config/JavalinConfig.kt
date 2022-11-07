@@ -1,5 +1,6 @@
 package ie.setu.config
 
+
 import ie.setu.controllers.HealthTrackerController
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
@@ -16,8 +17,8 @@ class JavalinConfig {
             it.registerPlugin(getConfiguredOpenApiPlugin())
             it.defaultContentType = "application/json"
         }.apply {
-             exception(Exception::class.java) { e, _ -> e.printStackTrace() }
-             error(404) { ctx -> ctx.json("404 - Not Found") }
+            exception(Exception::class.java) { e, _ -> e.printStackTrace() }
+            error(404) { ctx -> ctx.json("404 - Not Found") }
         }.start(getHerokuAssignedPort())
 
         registerRoutes(app)
@@ -36,37 +37,56 @@ class JavalinConfig {
             path("/api/users") {
                 get(HealthTrackerController::getAllUsers)
                 post(HealthTrackerController::addUser)
-                path("{user-id}"){
+                path("{user-id}") {
                     get(HealthTrackerController::getUserByUserId)
                     delete(HealthTrackerController::deleteUser)
                     patch(HealthTrackerController::updateUser)
-                    //The overall path is: "/api/users/:user-id/activities"
-                    path("activities"){
+                    path("activities") {
                         get(HealthTrackerController::getActivitiesByUserId)
+                        delete(HealthTrackerController::deleteActivityByUserId)
+                    }
+                    path("sleepingTimes") {
+                        get(HealthTrackerController::getSleepingTimesByUserId)
+                        delete(HealthTrackerController::deleteSleepingTimeByUserId)
                     }
                 }
-                path("/email/{email}"){
+                path("/email/{email}") {
                     get(HealthTrackerController::getUserByEmail)
                 }
             }
             path("/api/activities") {
                 get(HealthTrackerController::getAllActivities)
                 post(HealthTrackerController::addActivity)
+                path("{activity-id}") {
+                    get(HealthTrackerController::getActivitiesByActivityId)
+                    delete(HealthTrackerController::deleteActivityByActivityId)
+                    patch(HealthTrackerController::updateActivity)
+                }
+            }
+            path("/api/sleepingTimes") {
+                get(HealthTrackerController::getAllSleepingTimes)
+                post(HealthTrackerController::addSleepingTime)
+                path("{sleepingTime-id}") {
+                    get(HealthTrackerController::getSleepingTimesBySleepingTimeId)
+                    delete(HealthTrackerController::deleteSleepingTimeBySleepingTimeId)
+                    patch(HealthTrackerController::updateSleepingTime)
+                }
             }
         }
     }
 
-    fun getConfiguredOpenApiPlugin() = OpenApiPlugin(
-        OpenApiOptions(
-            Info().apply {
-                title("Health Tracker App")
-                version("1.0")
-                description("Health Tracker API")
+        fun getConfiguredOpenApiPlugin() = OpenApiPlugin(
+            OpenApiOptions(
+                Info().apply {
+                    title("Health Tracker App")
+                    version("1.0")
+                    description("Health Tracker API")
+                }
+            ).apply {
+                path("/swagger-docs") // endpoint for OpenAPI json
+                swagger(SwaggerOptions("/swagger-ui")) // endpoint for swagger-ui
+                reDoc(ReDocOptions("/redoc")) // endpoint for redoc
             }
-        ).apply {
-            path("/swagger-docs") // endpoint for OpenAPI json
-            swagger(SwaggerOptions("/swagger-ui")) // endpoint for swagger-ui
-            reDoc(ReDocOptions("/redoc")) // endpoint for redoc
-        }
-    )
-}
+        )
+    }
+
