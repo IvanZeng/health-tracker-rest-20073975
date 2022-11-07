@@ -34,8 +34,9 @@ fun mapToSleepingTime(it: ResultRow) = SleepingTime(
 
 fun mapToBMI(it: ResultRow) = Bmi(
     id = it[Bmis.id],
+    gender =it[Bmis.gender],
     height = it[Bmis.height],
     weight = it[Bmis.weight],
     bmiData = it[Bmis.bmiData],
-    userId = it[SleepingTimes.userId],
+    userId = it[Bmis.userId],
 )

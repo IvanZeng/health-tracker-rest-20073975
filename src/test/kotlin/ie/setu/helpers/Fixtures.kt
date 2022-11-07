@@ -1,12 +1,15 @@
 package ie.setu.helpers
 
 import ie.setu.domain.Activity
+import ie.setu.domain.Bmi
 import ie.setu.domain.SleepingTime
 import ie.setu.domain.User
 import ie.setu.domain.db.Activities
+import ie.setu.domain.db.Bmis
 import ie.setu.domain.db.SleepingTimes
 import ie.setu.domain.db.Users
 import ie.setu.domain.repository.ActivityDAO
+import ie.setu.domain.repository.BmiDAO
 import ie.setu.domain.repository.SleepingTimeDAO
 import ie.setu.domain.repository.UserDAO
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -35,6 +38,12 @@ val sleepingTimes = arrayListOf<SleepingTime>(
     SleepingTime(id = 3, started = DateTime.now(), finished = DateTime.now(), duration = 9.6, deepSleepingTime = 3, userId = 2)
 )
 
+val bmis = arrayListOf<Bmi>(
+    Bmi(id = 1, gender = "Male" ,height = 175, weight = 90.4, bmiData = "Overweight", userId = 1),
+    Bmi(id = 2, gender = "Male" ,height = 180, weight = 77.2, bmiData = "Normal", userId = 1),
+    Bmi(id = 3, gender = "Female" ,height = 169, weight = 44.4, bmiData = "Underweight", userId = 2)
+)
+
 fun populateUserTable(): UserDAO {
     SchemaUtils.create(Users)
     val userDAO = UserDAO()
@@ -59,4 +68,13 @@ fun populateSleepingTimeTable(): SleepingTimeDAO {
     sleepingTimeDAO.save(sleepingTimes.get(1))
     sleepingTimeDAO.save(sleepingTimes.get(2))
     return sleepingTimeDAO
+}
+
+fun populateBmiTable(): BmiDAO {
+    SchemaUtils.create(Bmis)
+    val bmiDAO = BmiDAO()
+    bmiDAO.save(bmis.get(0))
+    bmiDAO.save(bmis.get(1))
+    bmiDAO.save(bmis.get(2))
+    return bmiDAO
 }

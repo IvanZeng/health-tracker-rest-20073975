@@ -39,6 +39,7 @@ class BmiDAO {
     fun save(bmi: Bmi) {
         transaction {
             Bmis.insert {
+                it[gender] = bmi.gender
                 it[height] = bmi.height
                 it[weight] = bmi.weight
                 it[bmiData] = bmi.bmiData
