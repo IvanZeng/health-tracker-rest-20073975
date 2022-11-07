@@ -39,9 +39,9 @@ fun mapToBMI(it: ResultRow) = Bmi(
 )
 
 fun mapToCalorie(it: ResultRow) = Calorie(
-    id = it[Bmis.id],
+    id = it[Calories.id],
     dateTime =it[Calories.dateTime],
     calorieGet = it[Calories.calorieGet],
     state = it[Calories.state],
-    userId = it[Bmis.userId],
+    userId = it[Calories.userId],
 )

@@ -1,17 +1,12 @@
 package ie.setu.helpers
 
-import ie.setu.domain.Activity
-import ie.setu.domain.Bmi
-import ie.setu.domain.SleepingTime
-import ie.setu.domain.User
+import Calories
+import ie.setu.domain.*
 import ie.setu.domain.db.Activities
 import ie.setu.domain.db.Bmis
 import ie.setu.domain.db.SleepingTimes
 import ie.setu.domain.db.Users
-import ie.setu.domain.repository.ActivityDAO
-import ie.setu.domain.repository.BmiDAO
-import ie.setu.domain.repository.SleepingTimeDAO
-import ie.setu.domain.repository.UserDAO
+import ie.setu.domain.repository.*
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.joda.time.DateTime
 
@@ -42,6 +37,12 @@ val bmis = arrayListOf<Bmi>(
     Bmi(id = 1, gender = "Male" ,height = 175, weight = 90.4, bmiData = "Overweight", userId = 1),
     Bmi(id = 2, gender = "Male" ,height = 180, weight = 77.2, bmiData = "Normal", userId = 1),
     Bmi(id = 3, gender = "Female" ,height = 169, weight = 44.4, bmiData = "Underweight", userId = 2)
+)
+
+val calories = arrayListOf<Calorie>(
+    Calorie(id = 1, dateTime = DateTime.now(), calorieGet = 4000, state = "Over", userId = 1),
+    Calorie(id = 2, dateTime = DateTime.now(), calorieGet = 2100, state = "Normal", userId = 1),
+    Calorie(id = 3, dateTime = DateTime.now(), calorieGet = 4920, state = "Over", userId = 2)
 )
 
 fun populateUserTable(): UserDAO {
@@ -77,4 +78,13 @@ fun populateBmiTable(): BmiDAO {
     bmiDAO.save(bmis.get(1))
     bmiDAO.save(bmis.get(2))
     return bmiDAO
+}
+
+fun populateCalorieTable(): CalorieDAO {
+    SchemaUtils.create(Calories)
+    val calorieDAO = CalorieDAO()
+    calorieDAO.save(calories.get(0))
+    calorieDAO.save(calories.get(1))
+    calorieDAO.save(calories.get(2))
+    return calorieDAO
 }

@@ -5,15 +5,11 @@ import ie.setu.domain.Bmi
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import ie.setu.domain.SleepingTime
 import ie.setu.domain.db.Bmis
-import ie.setu.domain.db.SleepingTimes
 import ie.setu.domain.repository.BmiDAO
-import ie.setu.domain.repository.SleepingTimeDAO
 import ie.setu.helpers.*
 import kotlin.test.assertEquals
 
@@ -135,7 +131,7 @@ class BmiDAOTest {
 
                 //Arrange - create and populate tables with three users and three bmis
                 val userDAO = populateUserTable()
-                val bmiTimeDAO = populateBmiTable()
+                val bmiDAO = populateBmiTable()
 
                 //Act & Assert
                 val bmi3updated = Bmi(id = 3, gender = "Female" ,height = 169, weight = 44.4, bmiData = "Underweight", userId = 2)
