@@ -1,15 +1,10 @@
 package ie.setu.utils
 
 import ie.setu.domain.Activity
+import ie.setu.domain.Bmi
 import ie.setu.domain.SleepingTime
 import ie.setu.domain.User
-import ie.setu.domain.db.Activities
-import ie.setu.domain.db.SleepingTimes
-import ie.setu.domain.db.SleepingTimes.autoIncrement
-import ie.setu.domain.db.SleepingTimes.primaryKey
-import ie.setu.domain.db.SleepingTimes.references
-import ie.setu.domain.db.Users
-import org.jetbrains.exposed.sql.ReferenceOption
+import ie.setu.domain.db.*
 import org.jetbrains.exposed.sql.ResultRow
 
 fun mapToUser(it: ResultRow) = User(
@@ -34,5 +29,13 @@ fun mapToSleepingTime(it: ResultRow) = SleepingTime(
     finished = it[SleepingTimes.finished],
     duration = it[SleepingTimes.duration],
     deepSleepingTime = it[SleepingTimes.deepSleepingTime],
+    userId = it[SleepingTimes.userId],
+)
+
+fun mapToBMI(it: ResultRow) = Bmi(
+    id = it[Bmis.id],
+    height = it[Bmis.height],
+    weight = it[Bmis.weight],
+    bmiData = it[Bmis.bmiData],
     userId = it[SleepingTimes.userId],
 )

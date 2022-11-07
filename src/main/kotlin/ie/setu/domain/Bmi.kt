@@ -1,0 +1,7 @@
+package ie.setu.domain
+
+data class Bmi (var id: Int,
+                var height: Int,
+                var weight: Double,
+                var bmiData: String,
+                var userId: Int)

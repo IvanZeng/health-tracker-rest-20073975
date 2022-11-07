@@ -6,10 +6,10 @@ import org.jetbrains.exposed.sql.Table
 // SRP - Responsibility is to manage one activity.
 //       Database wise, this is the table object.
 
-object BMI : Table("BMIs") {
+object Bmis : Table("bmis") {
     val id = integer("id").autoIncrement().primaryKey()
     val height = integer("height")
     val weight = double("duration")
-    val bmi = integer("BMI")
+    val bmiData = varchar("BMI", 60)
     val userId = integer("user_id").references(Users.id, onDelete = ReferenceOption.CASCADE)
 }

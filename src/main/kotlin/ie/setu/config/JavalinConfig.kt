@@ -49,6 +49,10 @@ class JavalinConfig {
                         get(HealthTrackerController::getSleepingTimesByUserId)
                         delete(HealthTrackerController::deleteSleepingTimeByUserId)
                     }
+                    path("bmis") {
+                        get(HealthTrackerController::getBmisByUserId)
+                        delete(HealthTrackerController::deleteBmiByUserId)
+                    }
                 }
                 path("/email/{email}") {
                     get(HealthTrackerController::getUserByEmail)
@@ -70,6 +74,15 @@ class JavalinConfig {
                     get(HealthTrackerController::getSleepingTimesBySleepingTimeId)
                     delete(HealthTrackerController::deleteSleepingTimeBySleepingTimeId)
                     patch(HealthTrackerController::updateSleepingTime)
+                }
+            }
+            path("/api/bmis") {
+                get(HealthTrackerController::getAllBmis)
+                post(HealthTrackerController::addBmi)
+                path("{bmi-id}") {
+                    get(HealthTrackerController::getBmisByBmiId)
+                    delete(HealthTrackerController::deleteBmiByBmiId)
+                    patch(HealthTrackerController::updateBmi)
                 }
             }
         }

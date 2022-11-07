@@ -5,9 +5,12 @@ import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import ie.setu.domain.Activity
+import ie.setu.domain.Bmi
 import ie.setu.domain.SleepingTime
 import ie.setu.domain.User
 import ie.setu.domain.repository.ActivityDAO
+import ie.setu.domain.repository.BmiDAO
+
 import ie.setu.domain.repository.SleepingTimeDAO
 import ie.setu.domain.repository.UserDAO
 import io.javalin.http.Context
@@ -18,6 +21,7 @@ object HealthTrackerController {
     val userDao = UserDAO()
     private val activityDAO = ActivityDAO()
     val sleepingTimeDAO = SleepingTimeDAO()
+    val bmiDAO = BmiDAO()
 
     @OpenApi(
         summary = "Get all users",
@@ -174,7 +178,6 @@ object HealthTrackerController {
         )
     }
 
-
     //--------------------------------------------------------------
 // SleepingTimeDAOI specifics
 //-------------------------------------------------------------
@@ -272,5 +275,110 @@ fun updateSleepingTime(ctx: Context){
         sleepingTimeId = ctx.pathParam("sleepingTime-id").toInt(),
         sleepingTimeDTO=sleepingTime)
 }
+
+
+    //--------------------------------------------------------------
+// BMIDAO specifics
+//-------------------------------------------------------------
+//
+    @OpenApi(
+        summary = "Get all bmis",
+        operationId = "getAllBmis",
+        tags = ["Bmi"],
+        path = "/api/bmis",
+        method = HttpMethod.GET,
+        responses = [OpenApiResponse("200", [OpenApiContent(Array<User>::class)])]
+    )
+    fun getAllBmis(ctx: Context) {
+        //mapper handles the deserialization of Joda date into a String.
+        val mapper = jacksonObjectMapper()
+            .registerModule(JodaModule())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+        ctx.json(mapper.writeValueAsString(bmiDAO.getAll()))
+    }
+
+    @OpenApi(
+        summary = "Get bmi by ID",
+        operationId = "getBmiById",
+        tags = ["Bmi"],
+        path = "/api/bmis/{bmi-id}",
+        method = HttpMethod.GET,
+        pathParams = [OpenApiParam("bmi-id", Int::class, "The bmi ID")],
+        responses  = [OpenApiResponse("200", [OpenApiContent(Bmi::class)])]
+    )
+    fun getBmisByUserId(ctx: Context) {
+        if (HealthTrackerController.userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
+            val Bmis = HealthTrackerController.bmiDAO.findByUserId(ctx.pathParam("user-id").toInt())
+            if (Bmis.isNotEmpty()) {
+                //mapper handles the deserialization of Joda date into a String.
+                val mapper = jacksonObjectMapper()
+                    .registerModule(JodaModule())
+                    .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                ctx.json(mapper.writeValueAsString(Bmis))
+            }
+        }
+    }
+    @OpenApi(
+        summary = "Add Bmi",
+        operationId = "addBmi",
+        tags = ["Bmi"],
+        path = "/api/bmi",
+        method = HttpMethod.POST,
+        pathParams = [OpenApiParam("bmi-id", Int::class, "The bmi ID")],
+        responses = [OpenApiResponse("200")]
+    )
+    fun addBmi(ctx: Context) {
+        //mapper handles the serialisation of Joda date into a String.
+        val mapper = jacksonObjectMapper()
+            .registerModule(JodaModule())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+        val bmi = mapper.readValue<Bmi>(ctx.body())
+        HealthTrackerController.bmiDAO.save(bmi)
+        ctx.json(bmi)
+    }
+
+
+    @OpenApi(
+        summary = "Get bmi by ID",
+        operationId = "getbmiById",
+        tags = ["Bmi"],
+        path = "/api/bmis/{bmi-id}",
+        method = HttpMethod.GET,
+        pathParams = [OpenApiParam("bmi-id", Int::class, "The bmi ID")],
+        responses = [OpenApiResponse("200", [OpenApiContent(Bmi::class)])]
+    )
+    fun getBmisByBmiId(ctx: Context) {
+        val bmi = HealthTrackerController.bmiDAO.findByBmiId((ctx.pathParam("bmi-id").toInt()))
+        if (bmi != null){
+            val mapper = jacksonObjectMapper()
+                .registerModule(JodaModule())
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+            ctx.json(mapper.writeValueAsString(bmi))
+        }
+    }
+
+    fun deleteBmiByBmiId(ctx: Context){
+        HealthTrackerController.bmiDAO.deleteByBmiId(ctx.pathParam("bmi-id").toInt())
+    }
+
+    fun deleteBmiByUserId(ctx: Context){
+        HealthTrackerController.bmiDAO.deleteByUserId(ctx.pathParam("user-id").toInt())
+    }
+
+    fun updateBmi(ctx: Context){
+        val mapper = jacksonObjectMapper()
+            .registerModule(JodaModule())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+        val bmi = mapper.readValue<Bmi>(ctx.body())
+        HealthTrackerController.bmiDAO.updateByBmiId(
+            bmiId = ctx.pathParam("sleepingTime-id").toInt(),
+            bmiDTO=bmi)
+    }
+
+
+
+
+
+
 }
 
