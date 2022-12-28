@@ -15,7 +15,7 @@ class DbConfig{
 
         val PGUSER = "qykpvqud"
         val PGPASSWORD = "MOgVIoeqO8Ovwam-7A_lDkzm5WfPrO5o"
-        val PGHOST = "mel.db.elephantsql.com/qykpvqud"
+        val PGHOST = "mel.db.elephantsql.com"
         val PGPORT = "5432"
         val PGDATABASE = "qykpvqud"
 
