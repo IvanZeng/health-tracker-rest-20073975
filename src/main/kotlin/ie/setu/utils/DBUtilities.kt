@@ -34,7 +34,7 @@ fun mapToBmi(it: ResultRow) = Bmi(
     gender =it[Bmis.gender],
     height = it[Bmis.height],
     weight = it[Bmis.weight],
-    bmiData = it[Bmis.bmiData],
+    bmidata = it[Bmis.bmidata],
     userId = it[Bmis.userId],
 )
 

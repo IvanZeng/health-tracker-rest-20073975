@@ -134,7 +134,7 @@ class BmiDAOTest {
                 val bmiDAO = populateBmiTable()
 
                 //Act & Assert
-                val bmi3updated = Bmi(id = 3, gender = "Female" ,height = 169, weight = 44.4, bmiData = "Underweight", userId = 2)
+                val bmi3updated = Bmi(id = 3, gender = "Female" ,height = 169, weight = 44.4, bmidata = "Underweight", userId = 2)
                 bmiDAO.updateByBmiId(bmi3updated.id, bmi3updated)
                 assertEquals(bmi3updated, bmiDAO.findByBmiId(3))
             }
@@ -149,7 +149,7 @@ class BmiDAOTest {
                 val bmiDAO = populateBmiTable()
 
                 //Act & Assert
-                val bmi4updated = Bmi(id = 3, gender = "Female" ,height = 169, weight = 44.4, bmiData = "Underweight", userId = 2)
+                val bmi4updated = Bmi(id = 3, gender = "Female" ,height = 169, weight = 44.4, bmidata = "Underweight", userId = 2)
                 bmiDAO.updateByBmiId(4, bmi4updated)
                 assertEquals(null, bmiDAO.findByBmiId(4))
                 assertEquals(3, bmiDAO.getAll().size)

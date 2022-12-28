@@ -1,6 +1,8 @@
 package ie.setu.domain.repository
 
+import ie.setu.domain.Activity
 import ie.setu.domain.Bmi
+import ie.setu.domain.db.Activities
 import ie.setu.domain.db.Bmis
 import ie.setu.utils.mapToBmi
 import org.jetbrains.exposed.sql.*
@@ -35,28 +37,28 @@ class BmiDAO {
         }
     }
 
-
-    fun save(bmi: Bmi) {
-        transaction {
+    //Save an bmi to the database
+    fun save(bmi: Bmi): Int {
+        return transaction {
             Bmis.insert {
                 it[gender] = bmi.gender
                 it[height] = bmi.height
                 it[weight] = bmi.weight
-                it[bmiData] = bmi.bmiData
+                it[bmidata] = bmi.bmidata
                 it[userId] = bmi.userId
             }
-        }
+        } get Bmis.id
     }
 
-    fun updateByBmiId(bmiId: Int, bmiDTO: Bmi) {
-        transaction {
-            Bmis.update({
-                Bmis.id eq bmiId
-            }) {
-                it[height] = bmiDTO.height
-                it[weight] = bmiDTO.weight
-                it[bmiData] = bmiDTO.bmiData
-                it[userId] = bmiDTO.userId
+    fun updateByBmiId(bmiId: Int, bmiToUpdate: Bmi) : Int{
+        return transaction {
+            Bmis.update ({
+                Bmis.id eq bmiId}) {
+                it[gender] = bmiToUpdate.gender
+                it[height] = bmiToUpdate.height
+                it[weight] = bmiToUpdate.weight
+                it[bmidata] = bmiToUpdate.bmidata
+                it[userId] = bmiToUpdate.userId
             }
         }
     }
