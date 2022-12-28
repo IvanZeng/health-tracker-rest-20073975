@@ -25,6 +25,7 @@ class JavalinConfig {
         return app
     }
 
+
     private fun getRemoteAssignedPort(): Int {
         val herokuPort = System.getenv("PORT")
         return if (herokuPort != null) {
