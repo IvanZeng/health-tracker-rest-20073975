@@ -9,13 +9,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 class BmiDAO {
 
     fun getAll(): ArrayList<Bmi> {
-        val BmisList: ArrayList<Bmi> = arrayListOf()
+        val bmisList: ArrayList<Bmi> = arrayListOf()
         transaction {
             Bmis.selectAll().map {
-                BmisList.add(mapToBmi(it))
+                bmisList.add(mapToBmi(it))
             }
         }
-        return BmisList
+        return bmisList
     }
 
     fun findByBmiId(id: Int): Bmi? {
