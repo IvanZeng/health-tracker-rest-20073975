@@ -4,11 +4,14 @@ package ie.setu.config
 import ie.setu.controllers.HealthTrackerController
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
+import io.javalin.plugin.json.JavalinJackson
 import io.javalin.plugin.openapi.ui.SwaggerOptions
 import io.javalin.plugin.openapi.OpenApiOptions
 import io.javalin.plugin.openapi.OpenApiPlugin
 import io.javalin.plugin.openapi.ui.ReDocOptions
 import io.swagger.v3.oas.models.info.Info
+import jsonObjectMapper
+
 class JavalinConfig {
 
     fun startJavalinService(): Javalin {
@@ -16,6 +19,9 @@ class JavalinConfig {
         val app = Javalin.create {
             it.registerPlugin(getConfiguredOpenApiPlugin())
             it.defaultContentType = "application/json"
+            //added this jsonMapper for our integration tests - serialise objects to json
+            it.jsonMapper(JavalinJackson(jsonObjectMapper()))
+            it.enableWebjars()
         }.apply {
             exception(Exception::class.java) { e, _ -> e.printStackTrace() }
             error(404) { ctx -> ctx.json("404 - Not Found") }

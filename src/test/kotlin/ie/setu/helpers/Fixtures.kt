@@ -9,13 +9,19 @@ import ie.setu.domain.db.Users
 import ie.setu.domain.repository.*
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.joda.time.DateTime
-
+import ie.setu.domain.Activity
+import ie.setu.domain.User
 
 val nonExistingEmail = "112233445566778testUser@xxxxx.xx"
 val validName = "Test User 1"
 val validEmail = "testuser1@test.com"
 val updatedName = "Updated Name"
 val updatedEmail = "Updated Email"
+
+val updatedDescription = "Updated Description"
+val updatedDuration = 30.0
+val updatedCalories = 945
+val updatedStarted = DateTime.parse("2020-06-11T05:59:27.258Z")
 
 val users = arrayListOf<User>(
     User(name = "Alice Wonderland", email = "alice@wonderland.com", id = 1),
@@ -51,43 +57,43 @@ val calories = arrayListOf<Calorie>(
 fun populateUserTable(): UserDAO {
     SchemaUtils.create(Users)
     val userDAO = UserDAO()
-    userDAO.save(users.get(0))
-    userDAO.save(users.get(1))
-    userDAO.save(users.get(2))
+    userDAO.save(users[0])
+    userDAO.save(users[1])
+    userDAO.save(users[2])
     return userDAO
 }
 fun populateActivityTable(): ActivityDAO {
     SchemaUtils.create(Activities)
     val activityDAO = ActivityDAO()
-    activityDAO.save(activities.get(0))
-    activityDAO.save(activities.get(1))
-    activityDAO.save(activities.get(2))
+    activityDAO.save(activities[0])
+    activityDAO.save(activities[1])
+    activityDAO.save(activities[2])
     return activityDAO
 }
 
 fun populateSleepingTimeTable(): SleepingTimeDAO {
     SchemaUtils.create(SleepingTimes)
     val sleepingTimeDAO = SleepingTimeDAO()
-    sleepingTimeDAO.save(sleepingTimes.get(0))
-    sleepingTimeDAO.save(sleepingTimes.get(1))
-    sleepingTimeDAO.save(sleepingTimes.get(2))
+    sleepingTimeDAO.save(sleepingTimes[0])
+    sleepingTimeDAO.save(sleepingTimes[1])
+    sleepingTimeDAO.save(sleepingTimes[2])
     return sleepingTimeDAO
 }
 
 fun populateBmiTable(): BmiDAO {
     SchemaUtils.create(Bmis)
     val bmiDAO = BmiDAO()
-    bmiDAO.save(bmis.get(0))
-    bmiDAO.save(bmis.get(1))
-    bmiDAO.save(bmis.get(2))
+    bmiDAO.save(bmis[0])
+    bmiDAO.save(bmis[1])
+    bmiDAO.save(bmis[2])
     return bmiDAO
 }
 
 fun populateCalorieTable(): CalorieDAO {
     SchemaUtils.create(Calories)
     val calorieDAO = CalorieDAO()
-    calorieDAO.save(calories.get(0))
-    calorieDAO.save(calories.get(1))
-    calorieDAO.save(calories.get(2))
+    calorieDAO.save(calories[0])
+    calorieDAO.save(calories[1])
+    calorieDAO.save(calories[2])
     return calorieDAO
 }
