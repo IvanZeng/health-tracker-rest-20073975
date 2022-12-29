@@ -109,10 +109,14 @@ class JavalinConfig {
             // The @routeComponent that we added in layout.html earlier will be replaced
             // by the String inside of VueComponent. This means a call to / will load
             // the layout and display our <home-page> component.
+            //User
             get("/", VueComponent("<home-page></home-page>"))
             get("/users", VueComponent("<user-overview></user-overview>"))
             get("/users/{user-id}", VueComponent("<user-profile></user-profile>"))
             get("/users/{user-id}/activities", VueComponent("<user-activity-overview></user-activity-overview>"))
+            //Activity
+            get("/activities", VueComponent("<activity-overview></activity-overview>"))
+            get("/activities/{activity-id}", VueComponent("<activity-profile></activity-profile>"))
         }
     }
 
