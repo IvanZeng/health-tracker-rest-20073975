@@ -117,6 +117,9 @@ class JavalinConfig {
             //Activity
             get("/activities", VueComponent("<activity-overview></activity-overview>"))
             get("/activities/{activity-id}", VueComponent("<activity-profile></activity-profile>"))
+            //Bmi
+            get("/bmis", VueComponent("<bmi-overview></bmi-overview>"))
+            get("/bmis/{bmi-id}", VueComponent("<bmi-profile></bmi-profile>"))
         }
     }
 

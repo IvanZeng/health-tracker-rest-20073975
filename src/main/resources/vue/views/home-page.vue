@@ -20,6 +20,15 @@
           </div>
         </div>
       </div>
+      <div class="col">
+        <div class="card">
+          <h5 class="card-header">Total Bmis</h5>
+          <div class="card-body">
+            <h5 class="card-title">{{bmis.length}} bmis</h5>
+            <a href="/bmis" class="btn btn-primary">More Details...</a>
+          </div>
+        </div>
+      </div>
     </div>
   </app-layout>
 </template>
@@ -30,7 +39,8 @@ Vue.component('home-page',
       template: "#home-page",
       data: () => ({
         users: [],
-        activities: []
+        activities: [],
+        bmis: []
       }),
       created() {
         axios.get("/api/users")
@@ -39,6 +49,9 @@ Vue.component('home-page',
         axios.get("/api/activities")
             .then(res => this.activities = res.data)
             .catch(() => alert("Error while fetching activities"));
+        axios.get("/api/bmis")
+            .then(res => this.bmis = res.data)
+            .catch(() => alert("Error while fetching bmis"));
       }
     });
 </script>
