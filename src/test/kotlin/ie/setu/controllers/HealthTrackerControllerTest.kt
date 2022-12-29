@@ -3,6 +3,7 @@ package ie.setu.controllers
 import ie.setu.config.DbConfig
 import ie.setu.domain.Activity
 import ie.setu.domain.Bmi
+import ie.setu.domain.SleepingTime
 import ie.setu.domain.User
 import ie.setu.helpers.ServerContainer
 import ie.setu.helpers.*
@@ -786,25 +787,4 @@ class HealthTrackerControllerTest {
     private fun deleteBmisByUserId(id: Int): HttpResponse<String> {
         return Unirest.delete(origin + "/api/users/$id/bmis").asString()
     }
-
-    @Nested
-    inner class ReadSleepingTimes {
-        //tests go in here
-    }
-
-    @Nested
-    inner class CreateSleepingTimes {
-        //tests go in here
-    }
-
-    @Nested
-    inner class UpdateSleepingTimes {
-        //tests go in here
-    }
-
-    @Nested
-    inner class DeleteSleepingTimes {
-        //tests go in here
-    }
-
 }

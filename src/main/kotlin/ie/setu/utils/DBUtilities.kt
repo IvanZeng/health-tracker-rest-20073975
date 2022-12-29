@@ -22,9 +22,7 @@ fun mapToActivity(it: ResultRow) = Activity(
 
 fun mapToSleepingTime(it: ResultRow) = SleepingTime(
     id = it[SleepingTimes.id],
-    started = it[SleepingTimes.started],
-    finished = it[SleepingTimes.finished],
-    duration = it[SleepingTimes.duration],
+    startedAt = it[SleepingTimes.startedAt],
     deepSleepingTime = it[SleepingTimes.deepSleepingTime],
     userId = it[SleepingTimes.userId],
 )

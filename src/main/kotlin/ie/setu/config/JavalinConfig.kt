@@ -9,6 +9,7 @@ import io.javalin.plugin.openapi.ui.SwaggerOptions
 import io.javalin.plugin.openapi.OpenApiOptions
 import io.javalin.plugin.openapi.OpenApiPlugin
 import io.javalin.plugin.openapi.ui.ReDocOptions
+import io.javalin.plugin.rendering.vue.VueComponent
 import io.swagger.v3.oas.models.info.Info
 import jsonObjectMapper
 
@@ -52,7 +53,7 @@ class JavalinConfig {
                         get(HealthTrackerController::getActivitiesByUserId)
                         delete(HealthTrackerController::deleteActivityByUserId)
                     }
-                    path("sleepingTimes") {
+                    path("sleeping_times") {
                         get(HealthTrackerController::getSleepingTimesByUserId)
                         delete(HealthTrackerController::deleteSleepingTimeByUserId)
                     }
@@ -78,10 +79,10 @@ class JavalinConfig {
                     patch(HealthTrackerController::updateActivity)
                 }
             }
-            path("/api/sleepingTimes") {
+            path("/api/sleeping_times") {
                 get(HealthTrackerController::getAllSleepingTimes)
                 post(HealthTrackerController::addSleepingTime)
-                path("{sleepingTime-id}") {
+                path("{sleepingtime-id}") {
                     get(HealthTrackerController::getSleepingTimesBySleepingTimeId)
                     delete(HealthTrackerController::deleteSleepingTimeBySleepingTimeId)
                     patch(HealthTrackerController::updateSleepingTime)
@@ -105,6 +106,13 @@ class JavalinConfig {
                     patch(HealthTrackerController::updateCalorie)
                 }
             }
+            // The @routeComponent that we added in layout.html earlier will be replaced
+            // by the String inside of VueComponent. This means a call to / will load
+            // the layout and display our <home-page> component.
+            get("/", VueComponent("<home-page></home-page>"))
+            get("/users", VueComponent("<user-overview></user-overview>"))
+            get("/users/{user-id}", VueComponent("<user-profile></user-profile>"))
+            get("/users/{user-id}/activities", VueComponent("<user-activity-overview></user-activity-overview>"))
         }
     }
 

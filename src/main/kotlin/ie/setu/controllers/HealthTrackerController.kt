@@ -219,101 +219,118 @@ object HealthTrackerController {
     }
 
     //--------------------------------------------------------------
-// SleepingTimeDAOI specifics
+// SleepingTimeDAO specifics
 //-------------------------------------------------------------
 //
     @OpenApi(
         summary = "Get all sleepTimes",
         operationId = "getAllSleepingTimes",
         tags = ["SleepingTime"],
-        path = "/api/sleepingTimes",
+        path = "/api/sleeping_times",
         method = HttpMethod.GET,
         responses = [OpenApiResponse("200", [OpenApiContent(Array<SleepingTime>::class)])]
     )
+
     fun getAllSleepingTimes(ctx: Context) {
-        //mapper handles the deserialization of Joda date into a String.
-        val mapper = jacksonObjectMapper()
-            .registerModule(JodaModule())
-            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-        ctx.json(mapper.writeValueAsString(sleepingTimeDAO.getAll()))
+        val sleepingTimes = sleepingTimeDAO.getAll()
+        if (sleepingTimes.size != 0) {
+            ctx.status(200)
+        }
+        else{
+            ctx.status(404)
+        }
+        ctx.json(sleepingTimes)
     }
 
 @OpenApi(
     summary = "Get sleepingTime by ID",
     operationId = "getSleepingTimeById",
     tags = ["SleepingTime"],
-    path = "/api/sleepingTimes/{sleepingTime-id}",
+    path = "/api/sleeping_times/{sleepingtime-id}",
     method = HttpMethod.GET,
-    pathParams = [OpenApiParam("sleepingTime-id", Int::class, "The sleeping time ID")],
+    pathParams = [OpenApiParam("sleepingtime-id", Int::class, "The sleeping time ID")],
     responses  = [OpenApiResponse("200", [OpenApiContent(SleepingTime::class)])]
 )
-fun getSleepingTimesByUserId(ctx: Context) {
-    if (HealthTrackerController.userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
-        val SleepingTimes = HealthTrackerController.sleepingTimeDAO.findByUserId(ctx.pathParam("user-id").toInt())
-        if (SleepingTimes.isNotEmpty()) {
-            //mapper handles the deserialization of Joda date into a String.
-            val mapper = jacksonObjectMapper()
-                .registerModule(JodaModule())
-                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-            ctx.json(mapper.writeValueAsString(SleepingTimes))
+
+    fun getSleepingTimesByUserId(ctx: Context) {
+        if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
+            val sleepingTimes = sleepingTimeDAO.findByUserId(ctx.pathParam("user-id").toInt())
+            if (sleepingTimes.isNotEmpty()) {
+                ctx.json(sleepingTimes)
+                ctx.status(200)
+            }
+            else{
+                ctx.status(404)
+            }
         }
     }
-}
     @OpenApi(
         summary = "Add SleepingTime",
         operationId = "addSleepingTime",
         tags = ["SleepingTime"],
-        path = "/api/sleepingTimes",
+        path = "/api/sleeping_times",
         method = HttpMethod.POST,
-        pathParams = [OpenApiParam("sleepingTime-id", Int::class, "The sleeping time ID")],
+        pathParams = [OpenApiParam("sleepingtime-id", Int::class, "The sleeping time ID")],
         responses = [OpenApiResponse("200")]
     )
-fun addSleepingTime(ctx: Context) {
-    //mapper handles the serialisation of Joda date into a String.
-    val mapper = jacksonObjectMapper()
-        .registerModule(JodaModule())
-        .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-    val sleepingTime = mapper.readValue<SleepingTime>(ctx.body())
-    HealthTrackerController.sleepingTimeDAO.save(sleepingTime)
-    ctx.json(sleepingTime)
-}
 
+    fun addSleepingTime(ctx: Context) {
+        val sleepingTime : SleepingTime = jsonToObject(ctx.body())
+        val userId = userDao.findById(sleepingTime.userId)
+        if (userId != null) {
+            val sleepingTimeId = sleepingTimeDAO.save(sleepingTime)
+            sleepingTime.id = sleepingTimeId
+            ctx.json(sleepingTime)
+            ctx.status(201)
+        }
+        else{
+            ctx.status(404)
+        }
+    }
 
     @OpenApi(
         summary = "Get sleepingTime by ID",
         operationId = "getsleepingTimeById",
         tags = ["SleepingTime"],
-        path = "/api/sleepingTimes/{sleepingTime-id}",
+        path = "/api/sleeping_times/{sleepingtime-id}",
         method = HttpMethod.GET,
-        pathParams = [OpenApiParam("sleepingTime-id", Int::class, "The sleeping time ID")],
+        pathParams = [OpenApiParam("sleepingtime-id", Int::class, "The sleeping time ID")],
         responses = [OpenApiResponse("200", [OpenApiContent(SleepingTime::class)])]
     )
-fun getSleepingTimesBySleepingTimeId(ctx: Context) {
-    val sleepingTime = HealthTrackerController.sleepingTimeDAO.findBySleepingTimeId((ctx.pathParam("sleepingTime-id").toInt()))
-    if (sleepingTime != null){
-        val mapper = jacksonObjectMapper()
-            .registerModule(JodaModule())
-            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-        ctx.json(mapper.writeValueAsString(sleepingTime))
+
+    fun getSleepingTimesBySleepingTimeId(ctx: Context) {
+        val sleepingTime = sleepingTimeDAO.findBySleepingTimeId((ctx.pathParam("sleepingtime-id").toInt()))
+        if (sleepingTime != null){
+            ctx.json(sleepingTime)
+            ctx.status(200)
+        }
+        else{
+            ctx.status(404)
+        }
     }
-}
 
 fun deleteSleepingTimeBySleepingTimeId(ctx: Context){
-    HealthTrackerController.sleepingTimeDAO.deleteBySleepingTimeId(ctx.pathParam("sleepingTime-id").toInt())
+    if (sleepingTimeDAO.deleteBySleepingTimeId(ctx.pathParam("sleepingtime-id").toInt()) != 0)
+        ctx.status(204)
+    else
+        ctx.status(404)
 }
 
 fun deleteSleepingTimeByUserId(ctx: Context){
-    HealthTrackerController.sleepingTimeDAO.deleteBySleepingTimeId(ctx.pathParam("user-id").toInt())
+    if (sleepingTimeDAO.deleteByUserId(ctx.pathParam("user-id").toInt()) != 0)
+        ctx.status(204)
+    else
+        ctx.status(404)
 }
 
 fun updateSleepingTime(ctx: Context){
-    val mapper = jacksonObjectMapper()
-        .registerModule(JodaModule())
-        .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-    val sleepingTime = mapper.readValue<SleepingTime>(ctx.body())
-    HealthTrackerController.sleepingTimeDAO.updateBySleepingTimeId(
-        sleepingTimeId = ctx.pathParam("sleepingTime-id").toInt(),
-        sleepingTimeDTO=sleepingTime)
+    val sleepingTime : SleepingTime = jsonToObject(ctx.body())
+    if (sleepingTimeDAO.updateBySleepingTimeId(
+            sleepingTimeId = ctx.pathParam("sleepingtime-id").toInt(),
+            sleepingTimeToUpdate =sleepingTime) != 0)
+        ctx.status(204)
+    else
+        ctx.status(404)
 }
 
 
@@ -529,7 +546,7 @@ fun updateSleepingTime(ctx: Context){
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
         val calorie = mapper.readValue<Calorie>(ctx.body())
         HealthTrackerController.calorieDAO.updateByCalorieId(
-            calorieId = ctx.pathParam("sleepingTime-id").toInt(),
+            calorieId = ctx.pathParam("sleepingtime-id").toInt(),
             calorieDTO=calorie)
     }
 }

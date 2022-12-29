@@ -134,7 +134,7 @@ class SleepingTimeDAOTest {
                 val sleepingTimeDAO = populateSleepingTimeTable()
 
                 //Act & Assert
-                val sleepingTime3updated = SleepingTime(id = 3, started = DateTime.now(), finished = DateTime.now(), duration = 6.3, deepSleepingTime = 5, userId = 2)
+                val sleepingTime3updated = SleepingTime(id = 3, startedAt = DateTime.now(), deepSleepingTime = 5, userId = 2)
                 sleepingTimeDAO.updateBySleepingTimeId(sleepingTime3updated.id, sleepingTime3updated)
                 assertEquals(sleepingTime3updated, sleepingTimeDAO.findBySleepingTimeId(3))
             }
@@ -149,7 +149,7 @@ class SleepingTimeDAOTest {
                 val sleepingTimeDAO = populateSleepingTimeTable()
 
                 //Act & Assert
-                val sleepingTime4updated = SleepingTime(id = 4, started = DateTime.now(), finished = DateTime.now(), duration = 6.3, deepSleepingTime = 5, userId = 2)
+                val sleepingTime4updated = SleepingTime(id = 4, startedAt = DateTime.now(), deepSleepingTime = 5, userId = 2)
                 sleepingTimeDAO.updateBySleepingTimeId(4, sleepingTime4updated)
                 assertEquals(null, sleepingTimeDAO.findBySleepingTimeId(4))
                 assertEquals(3, sleepingTimeDAO.getAll().size)

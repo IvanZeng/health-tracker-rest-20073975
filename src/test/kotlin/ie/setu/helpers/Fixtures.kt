@@ -28,6 +28,9 @@ val updatedHeight = 183
 val updatedWeight = 62.6
 val updatedBmidata = "Normal"
 
+//val updatedStarted = DateTime.parse("2020-06-11T05:59:27.258Z")
+//val deepSleepingTime = 3
+
 val users = arrayListOf<User>(
     User(name = "Alice Wonderland", email = "alice@wonderland.com", id = 1),
     User(name = "Bob Cat", email = "bob@cat.ie", id = 2),
@@ -42,9 +45,9 @@ val activities = arrayListOf<Activity>(
 )
 
 val sleepingTimes = arrayListOf<SleepingTime>(
-    SleepingTime(id = 1, started = DateTime.now(), finished = DateTime.now(), duration = 8.2, deepSleepingTime = 4, userId = 1),
-    SleepingTime(id = 2, started = DateTime.now(), finished = DateTime.now(), duration = 6.3, deepSleepingTime = 5, userId = 1),
-    SleepingTime(id = 3, started = DateTime.now(), finished = DateTime.now(), duration = 9.6, deepSleepingTime = 3, userId = 2)
+    SleepingTime(id = 1, startedAt = DateTime.now(), deepSleepingTime = 4, userId = 1),
+    SleepingTime(id = 2, startedAt = DateTime.now(), deepSleepingTime = 5, userId = 1),
+    SleepingTime(id = 3, startedAt = DateTime.now(), deepSleepingTime = 3, userId = 2)
 )
 
 val bmis = arrayListOf<Bmi>(

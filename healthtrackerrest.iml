@@ -152,5 +152,10 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpasyncclient:4.1.5" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.15" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.9.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:vue:2.6.10" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:axios:0.19.2" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:follow-redirects:1.5.10" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:debug:3.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:ms:2.0.0" level="project" />
   </component>
 </module>

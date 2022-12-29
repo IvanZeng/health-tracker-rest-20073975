@@ -1,5 +1,6 @@
 package ie.setu.domain.repository
 
+
 import ie.setu.domain.SleepingTime
 import ie.setu.domain.db.SleepingTimes
 import ie.setu.utils.mapToSleepingTime
@@ -7,7 +8,6 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class SleepingTimeDAO {
-
 
     fun getAll(): ArrayList<SleepingTime> {
         val sleepingTimesList: ArrayList<SleepingTime> = arrayListOf()
@@ -36,29 +36,23 @@ class SleepingTimeDAO {
         }
     }
 
-
-    fun save(sleepingTime: SleepingTime) {
-        transaction {
+    fun save(sleepingTime: SleepingTime): Int {
+        return transaction {
             SleepingTimes.insert {
-                it[started] = sleepingTime.started
-                it[finished] = sleepingTime.finished
-                it[duration] = sleepingTime.duration
+                it[startedAt] = sleepingTime.startedAt
                 it[deepSleepingTime] = sleepingTime.deepSleepingTime
                 it[userId] = sleepingTime.userId
             }
-        }
+        } get SleepingTimes.id
     }
 
-    fun updateBySleepingTimeId(sleepingTimeId: Int, sleepingTimeDTO: SleepingTime) {
-        transaction {
-            SleepingTimes.update({
-                SleepingTimes.id eq sleepingTimeId
-            }) {
-                it[started] = sleepingTimeDTO.started
-                it[finished] = sleepingTimeDTO.finished
-                it[duration] = sleepingTimeDTO.duration
-                it[deepSleepingTime] = sleepingTimeDTO.deepSleepingTime
-                it[userId] = sleepingTimeDTO.userId
+    fun updateBySleepingTimeId(sleepingTimeId: Int, sleepingTimeToUpdate: SleepingTime) : Int{
+        return transaction {
+            SleepingTimes.update ({
+                SleepingTimes.id eq sleepingTimeId}) {
+                it[startedAt] = sleepingTimeToUpdate.startedAt
+                it[deepSleepingTime] = sleepingTimeToUpdate.deepSleepingTime
+                it[userId] = sleepingTimeToUpdate.userId
             }
         }
     }
