@@ -9,7 +9,15 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
+/**
+ * Manages the database transactions and returns the results of the tracsactions
+ */
 class CalorieDAO {
+
+    /**
+     * Get all [calorie] from the Calories table.
+     * @return the list of the calorie following getAll.
+     */
         fun getAll(): ArrayList<Calorie> {
             val CaloriesList: ArrayList<Calorie> = arrayListOf()
             transaction {
@@ -20,6 +28,10 @@ class CalorieDAO {
             return CaloriesList
         }
 
+    /**
+     * Get a [calorie] from the Calories table.
+     * @return the ID of the calorie following the finding.
+     */
         fun findByCalorieId(id: Int): Calorie? {
             return transaction {
                 Calories
@@ -29,6 +41,10 @@ class CalorieDAO {
             }
         }
 
+    /**
+     * Get [calorie] from the Calories table by user ID.
+     * @return the ID of the calorie following the finding.
+     */
         fun findByUserId(userId: Int): List<Calorie> {
             return transaction {
                 Calories
@@ -37,7 +53,10 @@ class CalorieDAO {
             }
         }
 
-
+    /**
+     * Adds a [calorie] to the Calories table.
+     * @return the id of the calorie following the add.
+     */
         fun save(calorie: Calorie) {
             transaction {
                 Calories.insert {
@@ -49,6 +68,10 @@ class CalorieDAO {
             }
         }
 
+    /**
+     * Update [calorie] from the Calories table.
+     * @return the calorie following the update.
+     */
         fun updateByCalorieId(calorieId: Int, calorieDTO: Calorie) {
             transaction {
                 Calories.update({
@@ -62,12 +85,20 @@ class CalorieDAO {
             }
         }
 
+    /**
+     * Delete [calorie] from the calorie table by calorie id.
+     * @return the ID of the calorie following the delete.
+     */
         fun deleteByCalorieId(CalorieId: Int): Int {
             return transaction {
                 Calories.deleteWhere { Calories.id eq CalorieId }
             }
         }
 
+    /**
+     * Delete [calorie] from the Calorie table by user id.
+     * @return the ID of the calorie following the delete.
+     */
         fun deleteByUserId(userId: Int): Int {
             return transaction {
                 Calories.deleteWhere { Calories.userId eq userId }

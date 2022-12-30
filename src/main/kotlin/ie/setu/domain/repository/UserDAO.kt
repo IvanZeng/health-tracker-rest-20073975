@@ -11,6 +11,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
  */
 class UserDAO {
 
+    /**
+     * Get all [user] from the Users table.
+     * @return the list of the user following getAll.
+     */
     fun getAll(): ArrayList<User> {
         val userList: ArrayList<User> = arrayListOf()
         transaction {
@@ -20,6 +24,10 @@ class UserDAO {
         return userList
     }
 
+    /**
+     * Get a [user] from the Users table.
+     * @return the ID of the user following the finding.
+     */
     fun findById(id: Int): User?{
         return transaction {
             Users.select() {
@@ -42,6 +50,10 @@ class UserDAO {
         }
     }
 
+    /**
+     * Get [user] from the User table by email.
+     * @return the ID of the user following the finding.
+     */
     fun findByEmail(email: String) :User?{
         return transaction {
             Users.select() {
@@ -51,6 +63,10 @@ class UserDAO {
         }
     }
 
+    /**
+     * Delete [user] from the User table.
+     * @return the ID of the user following the delete.
+     */
     fun delete(id: Int):Int{
         return transaction{
             Users.deleteWhere{
@@ -59,6 +75,10 @@ class UserDAO {
         }
     }
 
+    /**
+     * Update [user] from the User table.
+     * @return the ID of the user following the update.
+     */
     fun update(id: Int, user: User): Int{
         return transaction {
             Users.update ({
