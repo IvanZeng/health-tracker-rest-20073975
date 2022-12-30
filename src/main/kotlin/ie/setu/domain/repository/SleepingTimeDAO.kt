@@ -1,8 +1,8 @@
 package ie.setu.domain.repository
 
 
-import ie.setu.domain.SleepingTime
-import ie.setu.domain.db.SleepingTimes
+import ie.setu.domain.Sleepingtime
+import ie.setu.domain.db.Sleepingtimes
 import ie.setu.utils.mapToSleepingTime
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -17,10 +17,10 @@ class SleepingTimeDAO {
      * Get all [sleepingTime] from the SleepingTimes table.
      * @return the list of the sleepingTime following getAll.
      */
-    fun getAll(): ArrayList<SleepingTime> {
-        val sleepingTimesList: ArrayList<SleepingTime> = arrayListOf()
+    fun getAll(): ArrayList<Sleepingtime> {
+        val sleepingTimesList: ArrayList<Sleepingtime> = arrayListOf()
         transaction {
-            SleepingTimes.selectAll().map {
+            Sleepingtimes.selectAll().map {
                 sleepingTimesList.add(mapToSleepingTime(it))
             }
         }
@@ -31,10 +31,10 @@ class SleepingTimeDAO {
      * Get a [sleepingTime] from the SleepingTimes table.
      * @return the ID of the sleepingTime following the finding.
      */
-    fun findBySleepingTimeId(id: Int): SleepingTime? {
+    fun findBySleepingTimeId(id: Int): Sleepingtime? {
         return transaction {
-            SleepingTimes
-                .select() { SleepingTimes.id eq id }
+            Sleepingtimes
+                .select() { Sleepingtimes.id eq id }
                 .map { mapToSleepingTime(it) }
                 .firstOrNull()
         }
@@ -44,10 +44,10 @@ class SleepingTimeDAO {
      * Get [sleepingTime] from the SleepingTimes table by user ID.
      * @return the ID of the sleepingTime following the finding.
      */
-    fun findByUserId(userId: Int): List<SleepingTime> {
+    fun findByUserId(userId: Int): List<Sleepingtime> {
         return transaction {
-            SleepingTimes
-                .select { SleepingTimes.userId eq userId }
+            Sleepingtimes
+                .select { Sleepingtimes.userId eq userId }
                 .map { mapToSleepingTime(it)}
         }
     }
@@ -56,27 +56,27 @@ class SleepingTimeDAO {
      * Adds a [sleepingTime] to the SleepingTimes table.
      * @return the id of the sleepingTime following the add.
      */
-    fun save(sleepingTime: SleepingTime): Int {
+    fun save(sleepingTime: Sleepingtime): Int {
         return transaction {
-            SleepingTimes.insert {
+            Sleepingtimes.insert {
                 it[startedAt] = sleepingTime.startedAt
                 it[deepSleepingTime] = sleepingTime.deepSleepingTime
                 it[userId] = sleepingTime.userId
             }
-        } get SleepingTimes.id
+        } get Sleepingtimes.id
     }
 
     /**
      * Update [sleepingTime] from the SleepingTimes table.
      * @return the sleepingTime following the update.
      */
-    fun updateBySleepingTimeId(sleepingTimeId: Int, sleepingTimeToUpdate: SleepingTime) : Int{
+    fun updateBySleepingTimeId(sleepingTimeId: Int, sleepingtimeToUpdate: Sleepingtime) : Int{
         return transaction {
-            SleepingTimes.update ({
-                SleepingTimes.id eq sleepingTimeId}) {
-                it[startedAt] = sleepingTimeToUpdate.startedAt
-                it[deepSleepingTime] = sleepingTimeToUpdate.deepSleepingTime
-                it[userId] = sleepingTimeToUpdate.userId
+            Sleepingtimes.update ({
+                Sleepingtimes.id eq sleepingTimeId}) {
+                it[startedAt] = sleepingtimeToUpdate.startedAt
+                it[deepSleepingTime] = sleepingtimeToUpdate.deepSleepingTime
+                it[userId] = sleepingtimeToUpdate.userId
             }
         }
     }
@@ -87,7 +87,7 @@ class SleepingTimeDAO {
      */
     fun deleteBySleepingTimeId(sleepingTimeId: Int): Int {
         return transaction {
-            SleepingTimes.deleteWhere { SleepingTimes.id eq sleepingTimeId }
+            Sleepingtimes.deleteWhere { Sleepingtimes.id eq sleepingTimeId }
         }
     }
 
@@ -97,7 +97,7 @@ class SleepingTimeDAO {
      */
     fun deleteByUserId(userId: Int): Int {
         return transaction {
-            SleepingTimes.deleteWhere { SleepingTimes.userId eq userId }
+            Sleepingtimes.deleteWhere { Sleepingtimes.userId eq userId }
         }
     }
 }

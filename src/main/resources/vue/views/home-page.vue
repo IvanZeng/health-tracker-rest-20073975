@@ -29,6 +29,15 @@
           </div>
         </div>
       </div>
+      <div class="col">
+        <div class="card">
+          <h5 class="card-header">Total Sleepingtimes</h5>
+          <div class="card-body">
+            <h5 class="card-title">{{sleepingtimes.length}} sleepingTimes</h5>
+            <a href="/sleepingtimes" class="btn btn-primary">More Details...</a>
+          </div>
+        </div>
+      </div>
     </div>
   </app-layout>
 </template>
@@ -40,7 +49,8 @@ Vue.component('home-page',
       data: () => ({
         users: [],
         activities: [],
-        bmis: []
+        bmis: [],
+        sleepingtimes: []
       }),
       created() {
         axios.get("/api/users")
@@ -52,6 +62,9 @@ Vue.component('home-page',
         axios.get("/api/bmis")
             .then(res => this.bmis = res.data)
             .catch(() => alert("Error while fetching bmis"));
+        axios.get("/api/sleepingtimes")
+            .then(res => this.sleepingtimes = res.data)
+            .catch(() => alert("Error while fetching sleepingTimes"));
       }
     });
 </script>

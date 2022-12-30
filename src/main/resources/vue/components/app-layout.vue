@@ -12,16 +12,17 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="/users">
-                Users <span class="sr-only">(current)</span>
-              </a>
+            <li class="nav-item ">
+              <a class="nav-link" href="/users">Users</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/activities">Activities</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/bmis">Bmis</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/sleepingtimes">SleepingTimes</a>
             </li>
           </ul>
         </div>

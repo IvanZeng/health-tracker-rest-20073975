@@ -20,11 +20,11 @@ fun mapToActivity(it: ResultRow) = Activity(
 )
 
 
-fun mapToSleepingTime(it: ResultRow) = SleepingTime(
-    id = it[SleepingTimes.id],
-    startedAt = it[SleepingTimes.startedAt],
-    deepSleepingTime = it[SleepingTimes.deepSleepingTime],
-    userId = it[SleepingTimes.userId],
+fun mapToSleepingTime(it: ResultRow) = Sleepingtime(
+    id = it[Sleepingtimes.id],
+    startedAt = it[Sleepingtimes.startedAt],
+    deepSleepingTime = it[Sleepingtimes.deepSleepingTime],
+    userId = it[Sleepingtimes.userId],
 )
 
 fun mapToBmi(it: ResultRow) = Bmi(

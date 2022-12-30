@@ -3,7 +3,6 @@ package ie.setu.controllers
 import ie.setu.config.DbConfig
 import ie.setu.domain.Activity
 import ie.setu.domain.Bmi
-import ie.setu.domain.SleepingTime
 import ie.setu.domain.User
 import ie.setu.helpers.ServerContainer
 import ie.setu.helpers.*

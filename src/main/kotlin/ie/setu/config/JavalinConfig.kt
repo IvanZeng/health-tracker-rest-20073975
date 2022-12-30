@@ -52,7 +52,7 @@ class JavalinConfig {
                         get(HealthTrackerController::getActivitiesByUserId)
                         delete(HealthTrackerController::deleteActivityByUserId)
                     }
-                    path("sleeping_times") {
+                    path("sleepingtimes") {
                         get(HealthTrackerController::getSleepingTimesByUserId)
                         delete(HealthTrackerController::deleteSleepingTimeByUserId)
                     }
@@ -78,7 +78,7 @@ class JavalinConfig {
                     patch(HealthTrackerController::updateActivity)
                 }
             }
-            path("/api/sleeping_times") {
+            path("/api/sleepingtimes") {
                 get(HealthTrackerController::getAllSleepingTimes)
                 post(HealthTrackerController::addSleepingTime)
                 path("{sleepingtime-id}") {
@@ -119,6 +119,9 @@ class JavalinConfig {
             //Bmi
             get("/bmis", VueComponent("<bmi-overview></bmi-overview>"))
             get("/bmis/{bmi-id}", VueComponent("<bmi-profile></bmi-profile>"))
+            //SleepingTime
+            get("/sleepingtimes", VueComponent("<sleepingtime-overview></sleepingtime-overview>"))
+            get("/sleepingtimes/{sleepingtime-id}", VueComponent("<sleepingtime-profile></sleepingtime-profile>"))
         }
     }
 

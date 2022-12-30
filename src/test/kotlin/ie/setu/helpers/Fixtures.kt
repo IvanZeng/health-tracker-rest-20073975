@@ -4,7 +4,7 @@ import Calories
 import ie.setu.domain.*
 import ie.setu.domain.db.Activities
 import ie.setu.domain.db.Bmis
-import ie.setu.domain.db.SleepingTimes
+import ie.setu.domain.db.Sleepingtimes
 import ie.setu.domain.db.Users
 import ie.setu.domain.repository.*
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -44,10 +44,10 @@ val activities = arrayListOf<Activity>(
     Activity(id = 3, description = "Walking", duration = 12.0, calories = 120, started = DateTime.now(), userId = 2)
 )
 
-val sleepingTimes = arrayListOf<SleepingTime>(
-    SleepingTime(id = 1, startedAt = DateTime.now(), deepSleepingTime = 4, userId = 1),
-    SleepingTime(id = 2, startedAt = DateTime.now(), deepSleepingTime = 5, userId = 1),
-    SleepingTime(id = 3, startedAt = DateTime.now(), deepSleepingTime = 3, userId = 2)
+val sleepingtimes = arrayListOf<Sleepingtime>(
+    Sleepingtime(id = 1, startedAt = DateTime.now(), deepSleepingTime = 4, userId = 1),
+    Sleepingtime(id = 2, startedAt = DateTime.now(), deepSleepingTime = 5, userId = 1),
+    Sleepingtime(id = 3, startedAt = DateTime.now(), deepSleepingTime = 3, userId = 2)
 )
 
 val bmis = arrayListOf<Bmi>(
@@ -80,11 +80,11 @@ fun populateActivityTable(): ActivityDAO {
 }
 
 fun populateSleepingTimeTable(): SleepingTimeDAO {
-    SchemaUtils.create(SleepingTimes)
+    SchemaUtils.create(Sleepingtimes)
     val sleepingTimeDAO = SleepingTimeDAO()
-    sleepingTimeDAO.save(sleepingTimes[0])
-    sleepingTimeDAO.save(sleepingTimes[1])
-    sleepingTimeDAO.save(sleepingTimes[2])
+    sleepingTimeDAO.save(sleepingtimes[0])
+    sleepingTimeDAO.save(sleepingtimes[1])
+    sleepingTimeDAO.save(sleepingtimes[2])
     return sleepingTimeDAO
 }
 

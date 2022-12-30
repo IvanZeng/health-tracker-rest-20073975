@@ -14,7 +14,6 @@ import ie.setu.domain.repository.UserDAO
 import ie.setu.utils.jsonToObject
 import io.javalin.http.Context
 import io.javalin.plugin.openapi.annotations.*
-import ie.setu.utils.jsonObjectMapper
 
 object HealthTrackerController {
 
@@ -146,9 +145,9 @@ object HealthTrackerController {
         summary = "Get all activities",
         operationId = "getAllActivities",
         tags = ["Activity"],
-        path = "/api/sleeping_times",
+        path = "/api/sleepingtimes",
         method = HttpMethod.GET,
-        responses = [OpenApiResponse("200", [OpenApiContent(Array<SleepingTime>::class)])]
+        responses = [OpenApiResponse("200", [OpenApiContent(Array<Sleepingtime>::class)])]
     )
 
     fun getAllActivities(ctx: Context) {
@@ -286,12 +285,12 @@ object HealthTrackerController {
 //-------------------------------------------------------------
 //
     @OpenApi(
-        summary = "Get all sleepTimes",
+        summary = "Get all sleepingTimes",
         operationId = "getAllSleepingTimes",
         tags = ["SleepingTime"],
-        path = "/api/sleeping_times",
+        path = "/api/sleepingtimes",
         method = HttpMethod.GET,
-        responses = [OpenApiResponse("200", [OpenApiContent(Array<SleepingTime>::class)])]
+        responses = [OpenApiResponse("200", [OpenApiContent(Array<Sleepingtime>::class)])]
     )
 
     fun getAllSleepingTimes(ctx: Context) {
@@ -309,10 +308,10 @@ object HealthTrackerController {
     summary = "Get sleepingTime by ID",
     operationId = "getSleepingTimeById",
     tags = ["SleepingTime"],
-    path = "/api/sleeping_times/{sleepingtime-id}",
+    path = "/api/sleepingtimes/{sleepingtime-id}",
     method = HttpMethod.GET,
     pathParams = [OpenApiParam("sleepingtime-id", Int::class, "The sleeping time ID")],
-    responses  = [OpenApiResponse("200", [OpenApiContent(SleepingTime::class)])]
+    responses  = [OpenApiResponse("200", [OpenApiContent(Sleepingtime::class)])]
 )
 
     fun getSleepingTimesByUserId(ctx: Context) {
@@ -331,14 +330,14 @@ object HealthTrackerController {
         summary = "Add SleepingTime",
         operationId = "addSleepingTime",
         tags = ["SleepingTime"],
-        path = "/api/sleeping_times",
+        path = "/api/sleepingtimes",
         method = HttpMethod.POST,
         pathParams = [OpenApiParam("sleepingtime-id", Int::class, "The sleeping time ID")],
         responses = [OpenApiResponse("200")]
     )
 
     fun addSleepingTime(ctx: Context) {
-        val sleepingTime : SleepingTime = jsonToObject(ctx.body())
+        val sleepingTime : Sleepingtime = jsonToObject(ctx.body())
         val userId = userDao.findById(sleepingTime.userId)
         if (userId != null) {
             val sleepingTimeId = sleepingTimeDAO.save(sleepingTime)
@@ -355,10 +354,10 @@ object HealthTrackerController {
         summary = "Get sleepingTime by ID",
         operationId = "getsleepingTimeById",
         tags = ["SleepingTime"],
-        path = "/api/sleeping_times/{sleepingtime-id}",
+        path = "/api/sleepingtimes/{sleepingtime-id}",
         method = HttpMethod.GET,
         pathParams = [OpenApiParam("sleepingtime-id", Int::class, "The sleeping time ID")],
-        responses = [OpenApiResponse("200", [OpenApiContent(SleepingTime::class)])]
+        responses = [OpenApiResponse("200", [OpenApiContent(Sleepingtime::class)])]
     )
 
     fun getSleepingTimesBySleepingTimeId(ctx: Context) {
@@ -376,7 +375,7 @@ object HealthTrackerController {
         summary = "Delete sleepingTime by ID",
         operationId = "deleteSleepingTimeById",
         tags = ["SleepingTime"],
-        path = "/api/sleeping_times/{sleepingtime-id}",
+        path = "/api/sleepingtimes/{sleepingtime-id}",
         method = HttpMethod.DELETE,
         pathParams = [OpenApiParam("sleepingtime-id", Int::class, "The sleeping time ID")],
         responses = [OpenApiResponse("204")]
@@ -392,7 +391,7 @@ fun deleteSleepingTimeBySleepingTimeId(ctx: Context){
         summary = "Delete sleepingTime by user ID",
         operationId = "deleteSleepingTimeByUserId",
         tags = ["SleepingTime"],
-        path = "/api/sleeping_times/{user-id}",
+        path = "/api/sleepingtimes/{user-id}",
         method = HttpMethod.DELETE,
         pathParams = [OpenApiParam("user-id", Int::class, "The user ID")],
         responses = [OpenApiResponse("204")]
@@ -408,16 +407,16 @@ fun deleteSleepingTimeByUserId(ctx: Context){
         summary = "Update sleepingTime by ID",
         operationId = "updateSleepingTimeById",
         tags = ["SleepingTime"],
-        path = "/api/sleeping_times/{sleepingtime-id}",
+        path = "/api/sleepingtimes/{sleepingtime-id}",
         method = HttpMethod.PATCH,
         pathParams = [OpenApiParam("sleepingtime-id", Int::class, "The sleeping time ID")],
         responses  = [OpenApiResponse("204")]
     )
 fun updateSleepingTime(ctx: Context){
-    val sleepingTime : SleepingTime = jsonToObject(ctx.body())
+    val sleepingTime : Sleepingtime = jsonToObject(ctx.body())
     if (sleepingTimeDAO.updateBySleepingTimeId(
             sleepingTimeId = ctx.pathParam("sleepingtime-id").toInt(),
-            sleepingTimeToUpdate =sleepingTime) != 0)
+            sleepingtimeToUpdate =sleepingTime) != 0)
         ctx.status(204)
     else
         ctx.status(404)

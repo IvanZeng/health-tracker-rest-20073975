@@ -7,18 +7,18 @@ import org.joda.time.DateTime
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import ie.setu.domain.SleepingTime
-import ie.setu.domain.db.SleepingTimes
+import ie.setu.domain.Sleepingtime
+import ie.setu.domain.db.Sleepingtimes
 import ie.setu.domain.repository.SleepingTimeDAO
 import ie.setu.helpers.*
 import kotlin.test.assertEquals
 
 //retrieving some test data from Fixtures
-private val sleepingTime1 = sleepingTimes.get(0)
-private val sleepingTime2 = sleepingTimes.get(1)
-private val sleepingTime3 = sleepingTimes.get(2)
+private val sleepingTime1 = sleepingtimes.get(0)
+private val sleepingTime2 = sleepingtimes.get(1)
+private val sleepingTime3 = sleepingtimes.get(2)
 
-class SleepingTimeDAOTest {
+class SleepingtimeDAOTest {
 
     companion object {
         //Make a connection to a local, in memory H2 database.
@@ -30,7 +30,7 @@ class SleepingTimeDAOTest {
     }
 
     @Nested
-    inner class CreateSleepingTimes {
+    inner class CreateSleepingtimes {
 
         @Test
         fun `multiple sleepingTimes added to table can be retrieved successfully`() {
@@ -48,7 +48,7 @@ class SleepingTimeDAOTest {
     }
 
     @Nested
-    inner class ReadSleepingTimes {
+    inner class ReadSleepingtimes {
 
         @Test
         fun `getting all sleepingTimes from a populated table returns all rows`() {
@@ -90,7 +90,7 @@ class SleepingTimeDAOTest {
             transaction {
 
                 //Arrange - create and setup sleepingTimeDAO object
-                SchemaUtils.create(SleepingTimes)
+                SchemaUtils.create(Sleepingtimes)
                 val sleepingTimeDAO = SleepingTimeDAO()
 
                 //Act & Assert
@@ -123,7 +123,7 @@ class SleepingTimeDAOTest {
     }
 
     @Nested
-    inner class UpdateSleepingTimes {
+    inner class UpdateSleepingtimes {
 
         @Test
         fun `updating existing sleepingTime in table results in successful update`() {
@@ -134,9 +134,9 @@ class SleepingTimeDAOTest {
                 val sleepingTimeDAO = populateSleepingTimeTable()
 
                 //Act & Assert
-                val sleepingTime3updated = SleepingTime(id = 3, startedAt = DateTime.now(), deepSleepingTime = 5, userId = 2)
-                sleepingTimeDAO.updateBySleepingTimeId(sleepingTime3updated.id, sleepingTime3updated)
-                assertEquals(sleepingTime3updated, sleepingTimeDAO.findBySleepingTimeId(3))
+                val sleepingtime3Updated = Sleepingtime(id = 3, startedAt = DateTime.now(), deepSleepingTime = 5, userId = 2)
+                sleepingTimeDAO.updateBySleepingTimeId(sleepingtime3Updated.id, sleepingtime3Updated)
+                assertEquals(sleepingtime3Updated, sleepingTimeDAO.findBySleepingTimeId(3))
             }
         }
 
@@ -149,8 +149,8 @@ class SleepingTimeDAOTest {
                 val sleepingTimeDAO = populateSleepingTimeTable()
 
                 //Act & Assert
-                val sleepingTime4updated = SleepingTime(id = 4, startedAt = DateTime.now(), deepSleepingTime = 5, userId = 2)
-                sleepingTimeDAO.updateBySleepingTimeId(4, sleepingTime4updated)
+                val sleepingtime4Updated = Sleepingtime(id = 4, startedAt = DateTime.now(), deepSleepingTime = 5, userId = 2)
+                sleepingTimeDAO.updateBySleepingTimeId(4, sleepingtime4Updated)
                 assertEquals(null, sleepingTimeDAO.findBySleepingTimeId(4))
                 assertEquals(3, sleepingTimeDAO.getAll().size)
             }
@@ -158,7 +158,7 @@ class SleepingTimeDAOTest {
     }
 
     @Nested
-    inner class DeleteSleepingTimes {
+    inner class DeleteSleepingtimes {
 
         @Test
         fun `deleting a non-existant sleepingTime (by id) in table results in no deletion`() {

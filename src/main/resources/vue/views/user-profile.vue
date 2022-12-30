@@ -59,6 +59,13 @@
             {{ bmi.bmidata }}
           </li>
         </ul>
+        <p  v-if="sleepingtimes.length == 0"> No sleeping times yet...</p>
+        <p  v-if="sleepingtimes.length > 0"> Sleeping times so far...</p>
+        <ul>
+          <li v-for="sleepingtime in sleepingtimes">
+            {{ sleepingtime.startedAt }} and deep sleeping time was  {{ sleepingtime.deepSleepingTime }} hours.
+          </li>
+        </ul>
       </div>
     </div>
   </app-layout>
@@ -72,6 +79,7 @@ Vue.component("user-profile", {
     noUserFound: false,
     activities: [],
     bmis: [],
+    sleepingtimes: [],
   }),
   created: function () {
     const userId = this.$javalin.pathParams["user-id"];
@@ -91,6 +99,11 @@ Vue.component("user-profile", {
         .then(res => this.bmis = res.data)
         .catch(error => {
           console.log("No bmis added yet (this is ok): " + error)
+        })
+    axios.get(url + `/sleepingtimes`)
+        .then(res => this.sleepingtimes = res.data)
+        .catch(error => {
+          console.log("No sleepingtimes added yet (this is ok): " + error)
         })
   },
   methods: {
