@@ -52,6 +52,13 @@
             {{ activity.description }} for {{ activity.duration }} minutes
           </li>
         </ul>
+        <p  v-if="bmis.length == 0"> No bmis yet...</p>
+        <p  v-if="bmis.length > 0"> Bmis so far...</p>
+        <ul>
+          <li v-for="bmi in bmis">
+            {{ bmi.bmidata }}
+          </li>
+        </ul>
       </div>
     </div>
   </app-layout>
@@ -64,6 +71,7 @@ Vue.component("user-profile", {
     user: null,
     noUserFound: false,
     activities: [],
+    bmis: [],
   }),
   created: function () {
     const userId = this.$javalin.pathParams["user-id"];
@@ -78,6 +86,11 @@ Vue.component("user-profile", {
         .then(res => this.activities = res.data)
         .catch(error => {
           console.log("No activities added yet (this is ok): " + error)
+        })
+    axios.get(url + `/bmis`)
+        .then(res => this.bmis = res.data)
+        .catch(error => {
+          console.log("No bmis added yet (this is ok): " + error)
         })
   },
   methods: {

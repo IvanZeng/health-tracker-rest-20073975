@@ -37,13 +37,13 @@
           </div>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="input-activity-duration">Started</span>
+              <span class="input-group-text" id="input-activity-started">Started</span>
             </div>
             <input type="text" class="form-control" v-model="formData.started" name="started" placeholder="Started"/>
           </div>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="input-activity-duration">User ID</span>
+              <span class="input-group-text" id="input-activity-userId">User ID</span>
             </div>
             <input type="text" class="form-control" v-model="formData.userId" name="userId" placeholder="UserId"/>
           </div>
