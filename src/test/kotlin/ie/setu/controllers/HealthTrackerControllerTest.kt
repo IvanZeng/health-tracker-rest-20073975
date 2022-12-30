@@ -3,6 +3,7 @@ package ie.setu.controllers
 import ie.setu.config.DbConfig
 import ie.setu.domain.Activity
 import ie.setu.domain.Bmi
+import ie.setu.domain.Sleepingtime
 import ie.setu.domain.User
 import ie.setu.helpers.ServerContainer
 import ie.setu.helpers.*
@@ -642,6 +643,238 @@ class HealthTrackerControllerTest {
         }
     }
 
+    @Nested
+    inner class ReadSleepingTimes {
+        @Test
+        fun `get all sleepingtimes from the database returns 200 or 404 response`() {
+            val response = retrieveAllSleepingtimes()
+            if (response.status == 200){
+                val retrievedSleepingtimes = jsonNodeToObject<Array<Sleepingtime>>(response)
+                assertNotEquals(0, retrievedSleepingtimes.size)
+            }
+            else{
+                assertEquals(404, response.status)
+            }
+        }
+
+        @Test
+        fun `get all sleepingtimes by user id when user and sleepingtimes exists returns 200 response`() {
+            //Arrange - add a user and 3 associated sleepingtimes that we plan to retrieve
+            val addedUser : User = jsonToObject(addUser(validName, validEmail).body.toString())
+            addSleepingtime(
+                sleepingtimes[0].startedAt, sleepingtimes[0].deepSleepingTime,
+                addedUser.id)
+            addSleepingtime(
+                sleepingtimes[1].startedAt, sleepingtimes[1].deepSleepingTime,
+                addedUser.id)
+            addSleepingtime(
+                sleepingtimes[2].startedAt, sleepingtimes[2].deepSleepingTime,
+                addedUser.id)
+
+            //Assert and Act - retrieve the three added sleepingtimes by user id
+            val response = retrieveSleepingtimesByUserId(addedUser.id)
+            assertEquals(200, response.status)
+            val retrievedSleepingtimes = jsonNodeToObject<Array<Sleepingtime>>(response)
+            assertEquals(3, retrievedSleepingtimes.size)
+
+            //After - delete the added user and assert a 204 is returned (sleepingtimes are cascade deleted)
+            assertEquals(204, deleteUser(addedUser.id).status)
+        }
+
+        @Test
+        fun `get all sleepingtimes by user id when no sleepingtimes exist returns 404 response`() {
+            //Arrange - add a user
+            val addedUser : User = jsonToObject(addUser(validName, validEmail).body.toString())
+
+            //Assert and Act - retrieve the sleepingtimes by user id
+            val response = retrieveSleepingtimesByUserId(addedUser.id)
+            assertEquals(404, response.status)
+
+            //After - delete the added user and assert a 204 is returned
+            assertEquals(204, deleteUser(addedUser.id).status)
+        }
+
+        @Test
+        fun `get all sleepingtimes by user id when no user exists returns 404 response`() {
+            //Arrange
+            val userId = -1
+
+            //Assert and Act - retrieve sleepingtimes by user id
+            val response = retrieveSleepingtimesByUserId(userId)
+            assertEquals(404, response.status)
+        }
+
+        @Test
+        fun `get sleepingtime by sleepingtime id when no sleepingtime exists returns 404 response`() {
+            //Arrange
+            val sleepingtimeId = -1
+            //Assert and Act - attempt to retrieve the sleepingtime by sleepingtime id
+            val response = retrieveSleepingtimeBySleepingtimeId(sleepingtimeId)
+            assertEquals(404, response.status)
+        }
+
+
+        @Test
+        fun `get sleepingtime by sleepingtime id when sleepingtime exists returns 200 response`() {
+            //Arrange - add a user and associated sleepingtime
+            val addedUser : User = jsonToObject(addUser(validName, validEmail).body.toString())
+            val addSleepingtimeResponse = addSleepingtime(
+                sleepingtimes[0].startedAt,
+                sleepingtimes[0].deepSleepingTime, addedUser.id)
+            assertEquals(201, addSleepingtimeResponse.status)
+            val addedSleepingtime = jsonNodeToObject<Sleepingtime>(addSleepingtimeResponse)
+
+            //Act & Assert - retrieve the sleepingtime by sleepingtime id
+            val response = retrieveSleepingtimeBySleepingtimeId(addedSleepingtime.id)
+            assertEquals(200, response.status)
+
+            //After - delete the added user and assert a 204 is returned
+            assertEquals(204, deleteUser(addedUser.id).status)
+        }
+    }
+
+    @Nested
+    inner class CreateSleepingtimes {
+        @Test
+        fun `add an sleepingtime when a user exists for it, returns a 201 response`() {
+
+            //Arrange - add a user and an associated sleepingtime that we plan to do a delete on
+            val addedUser: User = jsonToObject(addUser(validName, validEmail).body.toString())
+
+            val addSleepingtimeResponse = addSleepingtime(
+                sleepingtimes[0].startedAt, sleepingtimes[0].deepSleepingTime,
+                addedUser.id
+            )
+            assertEquals(201, addSleepingtimeResponse.status)
+
+            //After - delete the user (Sleepingtime will cascade delete in the database)
+            deleteUser(addedUser.id)
+        }
+
+        @Test
+        fun `add an sleepingtime when no user exists for it, returns a 404 response`() {
+
+            //Arrange - check there is no user for -1 id
+            val userId = -1
+            assertEquals(404, retrieveUserById(userId).status)
+
+            val addSleepingtimeResponse = addSleepingtime(
+                sleepingtimes.get(0).startedAt, sleepingtimes.get(0).deepSleepingTime,
+                userId
+            )
+            assertEquals(404, addSleepingtimeResponse.status)
+        }
+    }
+
+    @Nested
+    inner class UpdateSleepingtimes {
+        @Test
+        fun `updating an sleepingtime by leepingtime id when it doesn't exist, returns a 404 response`() {
+            val userId = -1
+            val sleepingtimeID = -1
+
+            //Arrange - check there is no user for -1 id
+            assertEquals(404, retrieveUserById(userId).status)
+
+            //Act & Assert - attempt to update the details of an sleepingtime/user that doesn't exist
+            assertEquals(
+                404, updateSleepingtime(
+                    sleepingtimeID, updatedStartedAt, updatedDeepSleepingTime,
+                    userId
+                ).status
+            )
+        }
+
+        @Test
+        fun `updating an sleepingtime by sleepingtime id when it exists, returns 204 response`() {
+
+            //Arrange - add a user and an associated sleepingtime that we plan to do an update on
+            val addedUser : User = jsonToObject(addUser(validName, validEmail).body.toString())
+            val addSleepingtimeResponse = addSleepingtime(
+                sleepingtimes[0].startedAt,
+                sleepingtimes[0].deepSleepingTime, addedUser.id)
+            assertEquals(201, addSleepingtimeResponse.status)
+            val addedSleepingtime = jsonNodeToObject<Sleepingtime>(addSleepingtimeResponse)
+
+            //Act & Assert - update the added sleepingtime and assert a 204 is returned
+            val updatedSleepingtimeResponse = updateSleepingtime(addedSleepingtime.id, updatedStartedAt,
+                updatedDeepSleepingTime, addedUser.id)
+            assertEquals(204, updatedSleepingtimeResponse.status)
+
+            //Assert that the individual fields were all updated as expected
+            val retrievedSleepingtimeResponse = retrieveBmiByBmiId(addedSleepingtime.id)
+            val updatedSleepingtime = jsonNodeToObject<Sleepingtime>(retrievedSleepingtimeResponse)
+            assertEquals(updatedStartedAt,updatedSleepingtime.startedAt)
+            assertEquals(updatedDeepSleepingTime, updatedSleepingtime.deepSleepingTime)
+
+            //After - delete the user
+            deleteUser(addedUser.id)
+        }
+    }
+
+    @Nested
+    inner class DeleteSleepingtimes {
+        @Test
+        fun `deleting an sleepingtime by sleepingtime id when it doesn't exist, returns a 404 response`() {
+            //Act & Assert - attempt to delete a user that doesn't exist
+            assertEquals(404, deleteSleepingtimeBySleepingtimeId(-1).status)
+        }
+
+        @Test
+        fun `deleting bmis by user id when it doesn't exist, returns a 404 response`() {
+            //Act & Assert - attempt to delete a user that doesn't exist
+            assertEquals(404, deleteSleepingtimesByUserId(-1).status)
+        }
+
+        @Test
+        fun `deleting an sleepingtime by id when it exists, returns a 204 response`() {
+
+            //Arrange - add a user and an associated sleepingtime that we plan to do a delete on
+            val addedUser : User = jsonToObject(addUser(validName, validEmail).body.toString())
+            val addSleepingtimeResponse = addSleepingtime(
+                sleepingtimes[0].startedAt, sleepingtimes[0].deepSleepingTime,
+                addedUser.id)
+            assertEquals(201, addSleepingtimeResponse.status)
+
+            //Act & Assert - delete the added sleepingtime and assert a 204 is returned
+            val addedSleepingtime = jsonNodeToObject<Sleepingtime>(addSleepingtimeResponse)
+            assertEquals(204, deleteSleepingtimeBySleepingtimeId(addedSleepingtime.id).status)
+
+            //After - delete the user
+            deleteUser(addedUser.id)
+        }
+
+        @Test
+        fun `deleting all sleepingtimes by userid when it exists, returns a 204 response`() {
+
+            //Arrange - add a user and 3 associated sleepingtimes that we plan to do a cascade delete
+            val addedUser : User = jsonToObject(addUser(validName, validEmail).body.toString())
+            val addSleepingtimeResponse1 = addSleepingtime(
+                sleepingtimes[0].startedAt, sleepingtimes[0].deepSleepingTime,
+                addedUser.id)
+            assertEquals(201, addSleepingtimeResponse1.status)
+            val addSleepingtimeResponse2 = addSleepingtime(
+                sleepingtimes[1].startedAt, sleepingtimes[1].deepSleepingTime,
+                addedUser.id)
+            assertEquals(201, addSleepingtimeResponse2.status)
+            val addSleepingtimeResponse3 = addSleepingtime(
+                sleepingtimes[2].startedAt, sleepingtimes[2].deepSleepingTime,
+                addedUser.id)
+            assertEquals(201, addSleepingtimeResponse3.status)
+
+            //Act & Assert - delete the added user and assert a 204 is returned
+            assertEquals(204, deleteUser(addedUser.id).status)
+
+            //Act & Assert - attempt to retrieve the deleted sleepingtimes
+            val addedSleepingtime1 = jsonNodeToObject<Sleepingtime>(addSleepingtimeResponse1)
+            val addedSleepingtime2 = jsonNodeToObject<Sleepingtime>(addSleepingtimeResponse2)
+            val addedSleepingtime3 = jsonNodeToObject<Sleepingtime>(addSleepingtimeResponse3)
+            assertEquals(404, retrieveSleepingtimeBySleepingtimeId(addedSleepingtime1.id).status)
+            assertEquals(404, retrieveSleepingtimeBySleepingtimeId(addedSleepingtime2.id).status)
+            assertEquals(404, retrieveSleepingtimeBySleepingtimeId(addedSleepingtime3.id).status)
+        }
+    }
+
     //--------------------------------------------------------------------------------------
     // HELPER METHODS - could move them into a test utility class when submitting assignment
     //--------------------------------------------------------------------------------------
@@ -785,5 +1018,54 @@ class HealthTrackerControllerTest {
     //helper function to delete an bmi by bmi id
     private fun deleteBmisByUserId(id: Int): HttpResponse<String> {
         return Unirest.delete(origin + "/api/users/$id/bmis").asString()
+    }
+
+    //helper function to retrieve all sleepingtimes
+    private fun retrieveAllSleepingtimes(): HttpResponse<JsonNode> {
+        return Unirest.get(origin + "/api/sleepingtimes").asJson()
+    }
+
+    //helper function to retrieve sleepingtimes by user id
+    private fun retrieveSleepingtimesByUserId(id: Int): HttpResponse<JsonNode> {
+        return Unirest.get(origin + "/api/users/${id}/sleepingtimes").asJson()
+    }
+
+    //helper function to retrieve sleepingtime by sleepingtime id
+    private fun retrieveSleepingtimeBySleepingtimeId(id: Int): HttpResponse<JsonNode> {
+        return Unirest.get(origin + "/api/sleepingtimes/${id}").asJson()
+    }
+
+    private fun addSleepingtime(startedAt: DateTime, deepSleepingTime: Int, userId: Int): HttpResponse<JsonNode> {
+        return Unirest.post(origin + "/api/sleepingtimes")
+            .body("""
+                {
+                   "startedAt":"$startedAt",
+                   "deepSleepingTime":$deepSleepingTime,
+                   "userId":$userId
+                }
+            """.trimIndent())
+            .asJson()
+    }
+
+    //helper function to add a test user to the database
+    private fun updateSleepingtime(id: Int, startedAt: DateTime, deepSleepingTime: Int, userId: Int): HttpResponse<JsonNode> {
+        return Unirest.patch(origin + "/api/sleepingtimes/$id")
+            .body("""
+                {
+                  "startedAt":"$startedAt",
+                  "deepSleepingTime":$deepSleepingTime,
+                  "userId":$userId
+                }
+            """.trimIndent()).asJson()
+    }
+
+    //helper function to delete an sleepingtime by sleepingtime id
+    private fun deleteSleepingtimeBySleepingtimeId(id: Int): HttpResponse<String> {
+        return Unirest.delete(origin + "/api/sleepingtimes/$id").asString()
+    }
+
+    //helper function to delete an bmi by bmi id
+    private fun deleteSleepingtimesByUserId(id: Int): HttpResponse<String> {
+        return Unirest.delete(origin + "/api/users/$id/sleepingtimes").asString()
     }
 }

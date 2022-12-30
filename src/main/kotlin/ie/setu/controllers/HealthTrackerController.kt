@@ -316,16 +316,20 @@ object HealthTrackerController {
 
     fun getSleepingTimesByUserId(ctx: Context) {
         if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
-            val sleepingTimes = sleepingTimeDAO.findByUserId(ctx.pathParam("user-id").toInt())
-            if (sleepingTimes.isNotEmpty()) {
-                ctx.json(sleepingTimes)
+            val sleepingtimes = sleepingTimeDAO.findByUserId(ctx.pathParam("user-id").toInt())
+            if (sleepingtimes != null) {
+                ctx.json(sleepingtimes)
                 ctx.status(200)
             }
             else{
                 ctx.status(404)
             }
         }
+        else{
+            ctx.status(404)
+        }
     }
+
     @OpenApi(
         summary = "Add SleepingTime",
         operationId = "addSleepingTime",
@@ -337,12 +341,12 @@ object HealthTrackerController {
     )
 
     fun addSleepingTime(ctx: Context) {
-        val sleepingTime : Sleepingtime = jsonToObject(ctx.body())
-        val userId = userDao.findById(sleepingTime.userId)
+        val sleepingtime : Sleepingtime = jsonToObject(ctx.body())
+        val userId = userDao.findById(sleepingtime.userId)
         if (userId != null) {
-            val sleepingTimeId = sleepingTimeDAO.save(sleepingTime)
-            sleepingTime.id = sleepingTimeId
-            ctx.json(sleepingTime)
+            val sleepingTimeId = sleepingTimeDAO.save(sleepingtime)
+            sleepingtime.id = sleepingTimeId
+            ctx.json(sleepingtime)
             ctx.status(201)
         }
         else{

@@ -28,6 +28,11 @@ val updatedHeight = 183
 val updatedWeight = 62.6
 val updatedBmidata = "Normal"
 
+val updatedStartedAt = DateTime.parse("2020-06-11T05:59:27.258Z")
+val updatedDeepSleepingTime = 3
+
+
+
 //val updatedStarted = DateTime.parse("2020-06-11T05:59:27.258Z")
 //val deepSleepingTime = 3
 
