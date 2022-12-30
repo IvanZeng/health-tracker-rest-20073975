@@ -142,6 +142,15 @@ object HealthTrackerController {
     // ActivityDAOI specifics
     //-------------------------------------------------------------
 
+    @OpenApi(
+        summary = "Get all activities",
+        operationId = "getAllActivities",
+        tags = ["Activity"],
+        path = "/api/sleeping_times",
+        method = HttpMethod.GET,
+        responses = [OpenApiResponse("200", [OpenApiContent(Array<SleepingTime>::class)])]
+    )
+
     fun getAllActivities(ctx: Context) {
         val activities = activityDAO.getAll()
         if (activities.size != 0) {
@@ -153,6 +162,15 @@ object HealthTrackerController {
         ctx.json(activities)
     }
 
+    @OpenApi(
+        summary = "Get activity by ID",
+        operationId = "getActivityById",
+        tags = ["Activity"],
+        path = "/api/Activities/{activity-id}",
+        method = HttpMethod.GET,
+        pathParams = [OpenApiParam("activity-id", Int::class, "The activity ID")],
+        responses  = [OpenApiResponse("200", [OpenApiContent(Activity::class)])]
+    )
     fun getActivitiesByUserId(ctx: Context) {
         if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
             val activities = activityDAO.findByUserId(ctx.pathParam("user-id").toInt())
@@ -169,6 +187,15 @@ object HealthTrackerController {
         }
     }
 
+    @OpenApi(
+        summary = "Get activity by ID",
+        operationId = "getactivityById",
+        tags = ["Activity"],
+        path = "/api/activities/{activity-id}",
+        method = HttpMethod.GET,
+        pathParams = [OpenApiParam("activity-id", Int::class, "The Activity ID")],
+        responses = [OpenApiResponse("200", [OpenApiContent(Activity::class)])]
+    )
     fun getActivitiesByActivityId(ctx: Context) {
         val activity = activityDAO.findByActivityId((ctx.pathParam("activity-id").toInt()))
         if (activity != null){
@@ -180,6 +207,15 @@ object HealthTrackerController {
         }
     }
 
+    @OpenApi(
+        summary = "Add Activity",
+        operationId = "addActivity",
+        tags = ["Activity"],
+        path = "/api/activities",
+        method = HttpMethod.POST,
+        pathParams = [OpenApiParam("activity-id", Int::class, "The Activity ID")],
+        responses = [OpenApiResponse("200")]
+    )
     fun addActivity(ctx: Context) {
         val activity : Activity = jsonToObject(ctx.body())
         val userId = userDao.findById(activity.userId)
@@ -194,6 +230,15 @@ object HealthTrackerController {
         }
     }
 
+    @OpenApi(
+        summary = "Delete activity by ID",
+        operationId = "deleteActivityById",
+        tags = ["Activity"],
+        path = "/api/acitivies/{activity-id}",
+        method = HttpMethod.DELETE,
+        pathParams = [OpenApiParam("activity-id", Int::class, "The activity ID")],
+        responses = [OpenApiResponse("204")]
+    )
     fun deleteActivityByActivityId(ctx: Context){
         if (activityDAO.deleteByActivityId(ctx.pathParam("activity-id").toInt()) != 0)
             ctx.status(204)
@@ -201,6 +246,15 @@ object HealthTrackerController {
             ctx.status(404)
     }
 
+    @OpenApi(
+        summary = "Delete activity by user ID",
+        operationId = "deleteActivityByUserId",
+        tags = ["Activity"],
+        path = "/api/acitivies/{user-id}",
+        method = HttpMethod.DELETE,
+        pathParams = [OpenApiParam("user-id", Int::class, "The user ID")],
+        responses = [OpenApiResponse("204")]
+    )
     fun deleteActivityByUserId(ctx: Context){
         if (activityDAO.deleteByUserId(ctx.pathParam("user-id").toInt()) != 0)
             ctx.status(204)
@@ -208,6 +262,15 @@ object HealthTrackerController {
             ctx.status(404)
     }
 
+    @OpenApi(
+        summary = "Update activity by ID",
+        operationId = "updateActivityById",
+        tags = ["Activity"],
+        path = "/api/acitivies/{sleepingtime-id}",
+        method = HttpMethod.PATCH,
+        pathParams = [OpenApiParam("activity-id", Int::class, "The activity ID")],
+        responses  = [OpenApiResponse("204")]
+    )
     fun updateActivity(ctx: Context){
         val activity : Activity = jsonToObject(ctx.body())
         if (activityDAO.updateByActivityId(
@@ -308,7 +371,15 @@ object HealthTrackerController {
             ctx.status(404)
         }
     }
-
+    @OpenApi(
+        summary = "Delete sleepingTime by ID",
+        operationId = "deleteSleepingTimeById",
+        tags = ["SleepingTime"],
+        path = "/api/sleeping_times/{sleepingtime-id}",
+        method = HttpMethod.DELETE,
+        pathParams = [OpenApiParam("sleepingtime-id", Int::class, "The sleeping time ID")],
+        responses = [OpenApiResponse("204")]
+    )
 fun deleteSleepingTimeBySleepingTimeId(ctx: Context){
     if (sleepingTimeDAO.deleteBySleepingTimeId(ctx.pathParam("sleepingtime-id").toInt()) != 0)
         ctx.status(204)
@@ -316,6 +387,15 @@ fun deleteSleepingTimeBySleepingTimeId(ctx: Context){
         ctx.status(404)
 }
 
+    @OpenApi(
+        summary = "Delete sleepingTime by user ID",
+        operationId = "deleteSleepingTimeByUserId",
+        tags = ["SleepingTime"],
+        path = "/api/sleeping_times/{user-id}",
+        method = HttpMethod.DELETE,
+        pathParams = [OpenApiParam("user-id", Int::class, "The user ID")],
+        responses = [OpenApiResponse("204")]
+    )
 fun deleteSleepingTimeByUserId(ctx: Context){
     if (sleepingTimeDAO.deleteByUserId(ctx.pathParam("user-id").toInt()) != 0)
         ctx.status(204)
@@ -323,6 +403,15 @@ fun deleteSleepingTimeByUserId(ctx: Context){
         ctx.status(404)
 }
 
+    @OpenApi(
+        summary = "Update sleepingTime by ID",
+        operationId = "updateSleepingTimeById",
+        tags = ["SleepingTime"],
+        path = "/api/sleeping_times/{sleepingtime-id}",
+        method = HttpMethod.PATCH,
+        pathParams = [OpenApiParam("sleepingtime-id", Int::class, "The sleeping time ID")],
+        responses  = [OpenApiResponse("204")]
+    )
 fun updateSleepingTime(ctx: Context){
     val sleepingTime : SleepingTime = jsonToObject(ctx.body())
     if (sleepingTimeDAO.updateBySleepingTimeId(
@@ -428,6 +517,15 @@ fun updateSleepingTime(ctx: Context){
         }
     }
 
+    @OpenApi(
+        summary = "Delete bmi by ID",
+        operationId = "deleteBmiById",
+        tags = ["Bmi"],
+        path = "/api/bmis/{bmi-id}",
+        method = HttpMethod.DELETE,
+        pathParams = [OpenApiParam("bmi-id", Int::class, "The bmi ID")],
+        responses = [OpenApiResponse("204")]
+    )
     fun deleteBmiByBmiId(ctx: Context){
         if (bmiDAO.deleteByBmiId(ctx.pathParam("bmi-id").toInt()) != 0)
             ctx.status(204)
@@ -435,6 +533,15 @@ fun updateSleepingTime(ctx: Context){
             ctx.status(404)
     }
 
+    @OpenApi(
+        summary = "Delete bmi by user ID",
+        operationId = "deleteBmiByUserId",
+        tags = ["Bmi"],
+        path = "/api/bmis/{user-id}",
+        method = HttpMethod.DELETE,
+        pathParams = [OpenApiParam("user-id", Int::class, "The user ID")],
+        responses = [OpenApiResponse("204")]
+    )
     fun deleteBmiByUserId(ctx: Context){
         if (bmiDAO.deleteByUserId(ctx.pathParam("user-id").toInt()) != 0)
             ctx.status(204)
@@ -442,6 +549,15 @@ fun updateSleepingTime(ctx: Context){
             ctx.status(404)
     }
 
+    @OpenApi(
+        summary = "Update bmi by ID",
+        operationId = "updateBmiById",
+        tags = ["Bmi"],
+        path = "/api/bmis/{bmis-id}",
+        method = HttpMethod.PATCH,
+        pathParams = [OpenApiParam("bmi-id", Int::class, "The bmi ID")],
+        responses  = [OpenApiResponse("204")]
+    )
     fun updateBmi(ctx: Context){
         val bmi : Bmi = jsonToObject(ctx.body())
         if (bmiDAO.updateByBmiId(
@@ -532,21 +648,48 @@ fun updateSleepingTime(ctx: Context){
         }
     }
 
+    @OpenApi(
+        summary = "Delete calorie by ID",
+        operationId = "deleteCalorieById",
+        tags = ["Calorie"],
+        path = "/api/calories/{calorie-id}",
+        method = HttpMethod.DELETE,
+        pathParams = [OpenApiParam("calorie-id", Int::class, "The calorie ID")],
+        responses = [OpenApiResponse("204")]
+    )
     fun deleteCalorieByCalorieId(ctx: Context){
         HealthTrackerController.calorieDAO.deleteByCalorieId(ctx.pathParam("calorie-id").toInt())
     }
 
+    @OpenApi(
+        summary = "Delete calorie by user ID",
+        operationId = "deleteCalorieByUserId",
+        tags = ["Calorie"],
+        path = "/api/calories/{user-id}",
+        method = HttpMethod.DELETE,
+        pathParams = [OpenApiParam("user-id", Int::class, "The user ID")],
+        responses = [OpenApiResponse("204")]
+    )
     fun deleteCalorieByUserId(ctx: Context){
         HealthTrackerController.calorieDAO.deleteByUserId(ctx.pathParam("user-id").toInt())
     }
 
+    @OpenApi(
+        summary = "Update calorie by ID",
+        operationId = "updateCalorieById",
+        tags = ["Calorie"],
+        path = "/api/calories/{bmis-id}",
+        method = HttpMethod.PATCH,
+        pathParams = [OpenApiParam("calorie-id", Int::class, "The calorie ID")],
+        responses  = [OpenApiResponse("204")]
+    )
     fun updateCalorie(ctx: Context){
         val mapper = jacksonObjectMapper()
             .registerModule(JodaModule())
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
         val calorie = mapper.readValue<Calorie>(ctx.body())
         HealthTrackerController.calorieDAO.updateByCalorieId(
-            calorieId = ctx.pathParam("sleepingtime-id").toInt(),
+            calorieId = ctx.pathParam("calorie-id").toInt(),
             calorieDTO=calorie)
     }
 }
