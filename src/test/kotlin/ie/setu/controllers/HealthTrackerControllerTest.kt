@@ -7,8 +7,8 @@ import ie.setu.domain.SleepingTime
 import ie.setu.domain.User
 import ie.setu.helpers.ServerContainer
 import ie.setu.helpers.*
-import jsonNodeToObject
-import jsonToObject
+import ie.setu.utils.jsonNodeToObject
+import ie.setu.utils.jsonToObject
 import kong.unirest.HttpResponse
 import kong.unirest.JsonNode
 import kong.unirest.Unirest

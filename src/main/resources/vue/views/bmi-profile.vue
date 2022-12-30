@@ -32,3 +32,4 @@ Vue.component("bmi-profile", {
   }
 });
 </script>
+

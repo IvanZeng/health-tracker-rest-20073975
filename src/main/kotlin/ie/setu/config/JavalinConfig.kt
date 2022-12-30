@@ -1,6 +1,5 @@
 package ie.setu.config
 
-
 import ie.setu.controllers.HealthTrackerController
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
@@ -11,7 +10,7 @@ import io.javalin.plugin.openapi.OpenApiPlugin
 import io.javalin.plugin.openapi.ui.ReDocOptions
 import io.javalin.plugin.rendering.vue.VueComponent
 import io.swagger.v3.oas.models.info.Info
-import jsonObjectMapper
+import ie.setu.utils.jsonObjectMapper
 
 class JavalinConfig {
 

@@ -11,10 +11,10 @@ import ie.setu.domain.Activity
 import ie.setu.domain.User
 import ie.setu.domain.repository.ActivityDAO
 import ie.setu.domain.repository.UserDAO
-
+import ie.setu.utils.jsonToObject
 import io.javalin.http.Context
 import io.javalin.plugin.openapi.annotations.*
-import jsonToObject
+import ie.setu.utils.jsonObjectMapper
 
 object HealthTrackerController {
 
