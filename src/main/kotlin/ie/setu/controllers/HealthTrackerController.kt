@@ -371,6 +371,7 @@ object HealthTrackerController {
             ctx.status(404)
         }
     }
+
     @OpenApi(
         summary = "Delete sleepingTime by ID",
         operationId = "deleteSleepingTimeById",
